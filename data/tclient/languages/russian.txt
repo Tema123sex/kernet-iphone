@@ -1,0 +1,1630 @@
+##### authors #####
+
+# noxygalaxy
+# shibastik
+# dani_topik
+
+##### /authors #####
+
+##### translated strings #####
+
+Clan
+== Клан
+
+Custom colors
+== Свои цвета
+
+Delete
+== Удалить
+
+Name
+== Имя
+
+No
+== Нет
+
+Yes
+== Да
+
+Save
+== Сохранить
+
+HUD
+== HUD
+
+Website
+== Сайт
+
+Settings
+== Настройки
+
+Dummy
+== Дамми
+
+Discord
+== Дискорд
+
+Profiles
+== Профили
+
+Visual
+== Визуал
+
+Custom Font: 
+==     Шрифт: 
+
+Hide nameplates in spec
+== Скрывать имена в режиме наблюдателя
+
+Show skin names in nameplate
+== Показывать название скина около имени
+
+Freeze stars
+== Звёзды при заморозки
+
+Color frozen tee skins
+== Цветные замороженые скины
+
+Render all custom colored feet as white feet skin
+== Все ноги в белые ноги выбранного скина
+
+Show position and angle (mini debug)
+== Показывать позицию и угол прицела игрока (mini debug)
+
+Show your cursor when in free spectate
+== Показывать курсор в режиме наблюдателя
+
+Spectate cursor alpha
+== Прозр. курсора
+
+Show when you are the last alive
+== Показывать когда остался последний выживший
+
+Frozen Tee Display
+== Дисплей замороженных тии
+
+Show frozen tee display
+== Показывать дисплей замороженных тии
+
+Use skins instead of ninja tees
+== Использовать скины игроков вместо скина ниндзя
+
+Only show after joining a team
+== Показывать только в команде
+
+Max Rows
+== Макс. кол. строк
+
+Tee Size
+== Размер тии
+
+Tees left alive text
+== Текст оставшихся тии
+
+Count frozen tees
+== Считать замороженных тии
+
+Input
+== Ввод
+
+Fast Inputs (-20ms visual delay)
+== Быстрый ввод (-20ms визуальной задержки)
+
+Anti Latency Tools
+== Инструменты для устранения задержек
+
+Remove prediction & antiping in freeze
+== Убрать предсказания & антипинг в заморозке
+
+Amount
+== Кол.
+
+Delay
+== Задерж.
+
+Dont predict other players if you are frozen
+== Не предсказывать других игроков, если вы заморожены
+
+Adjust your prediction margin while frozen
+== Отрегулировать предсказания пока вы заморожены
+
+Frozen Margin
+== Предел в заморозке
+
+Tile Outlines
+== Обводка тайлов
+
+Show any enabled outlines
+== Показывать все включенные обводки
+
+Only show outlines in entities
+== Показывать обводку только в энтити
+
+Outline freeze & deep
+== Обводка заморозки и дип-фриза
+
+Outline walls
+== Обводка стен
+
+Outline teleporter
+== Обводка телепортов
+
+Outline unfreeze & undeep
+== Обводка разморозки и андип-фриза
+
+Outline width
+== Толщина обводки
+
+Outline alpha
+== Прозрачн. обводки
+
+Outline Alpha (walls)
+== Прозрачн. обводки (для стен)
+
+Freeze outline color
+== Цвет обводки заморозки
+
+Walls outline color
+== Цвет обводки стен
+
+Teleporter outline color
+== Цвет обводки телепортов
+
+Unfreeze outline color
+== Цвет обводки разморозки
+
+Optimistic prediction along stable direction
+== Оптимальное предсказание по стабильному направлению
+
+Negative stability buffer (for Gores)
+== Отрицательный буфер стабильности (для Gores)
+
+Uncertainty duration
+== Длител. неопредел.
+
+Other
+== Другое
+
+Ghost Tools
+== Призрачные инструменты
+
+Show unpredicted ghosts for other players
+== Показывайте непредсказуемых призраков для других игроков
+
+Swap ghosts and normal players
+== Поменять местами призраков и игроков
+
+Predicted alpha
+== Прозрачн. предсказ.
+
+Unpredicted alpha
+== Прозрачн. непредсказ.
+
+Hide ghosts of frozen players
+== Убрать призраков замороженных игроков
+
+Render ghosts as circles
+== Показывать призраков как круги
+
+Player Indicator
+== Индикатор игроков
+
+Show any enabled Indicators
+== Показывать индикаторы
+
+Hide indicator for tees on your screen
+== Убрать индикатор если игрок на экране
+
+Show only freeze Players
+== Показывать только игроков в заморозке
+
+Render tiny tees instead of circles
+== Показывать маленьких тии вместо кругов
+
+Use warlist groups for indicator
+== Использовать группы из Списка воинов для индикатора
+
+Indicator size
+== Размер индикатора
+
+Indicator opacity
+== Прозрачн. индикатора
+
+Change indicator offset based on distance to other tees
+== Изм. смещ. индикатора в зависимости от расст. до других тии
+
+Indicator min offset
+== Мин. смещ. индикатора
+
+Indicator max offset
+== Макс. смещ. индикатора
+
+Indicator max distance
+== Макс. дист. индикатора
+
+Indicator offset
+== Смещение индикатора
+
+Indicator alive color
+== Цвет игрока не в заморозке
+
+Indicator in freeze color
+== Цвет игрока в заморозке
+
+Indicator safe color
+== Цвет игрока в безопасности
+
+Rainbow
+== Радуга
+
+Rainbow Tees
+== Радужные тии
+
+Rainbow weapons
+== Радужное оружие
+
+Rainbow hook
+== Радужный крюк
+
+Rainbow others
+== Радужные другие тии
+
+Rainbow speed
+== Скорость радуги
+
+Pulse
+== Пульс
+
+Black
+== Черный
+
+Random
+== Рандом
+
+Tee Trails
+== Трейл тии
+
+Enable tee trails
+== Включить трейлы
+
+Fade trail alpha
+== Затухание трейла
+
+Taper trail width
+== Сужающаяся ширина трейла
+
+Trail width
+== Ширина трейла
+
+Trail length
+== Длина трейла
+
+Trail alpha
+== Прозрачность трейла
+
+Tee trail color
+== Цвет трейла
+
+Name:
+== Название:
+
+Command:
+== Команда:
+
+Override Selected
+== Изменить выделенный
+
+Remove Bind
+== Удалить
+
+Add Bind
+== Добавить
+
+Use left mouse to select
+== Чтобы выбрать используй ЛКМ
+
+Use right mouse to swap with selected
+== Используй ПКМ чтобы заменить выделенный
+
+Use middle mouse select without copy
+== Используй колесико мыши чтобы выбрать без копированния
+
+Reset position of mouse when opening bindwheel
+== Сбрасывать позицию мыши при открытии
+
+Warlist
+== Список войн
+
+Name
+== Игрок
+
+Clan
+== Клан
+
+War Entries
+== Игроки & Кланы
+
+Edit Entry
+== Редактирование
+
+Override Entry
+== Изменить игрока
+
+Add Entry
+== Добавить игрока
+
+Allow Duplicate Entries
+== Разрешить копии
+
+Enable warlist
+== Включить
+
+Colors in chat
+== Цвета в чате
+
+Colors in scoreboard
+== Цвета в табе
+
+War Groups
+== Группы
+
+Override Group
+== Изменить группу
+
+Add Group
+== Добавить группу
+
+Online Players
+== Игроки на сервере
+
+Show clan if war
+== Показывать клан
+
+Chat Binds
+== Бинды для чата
+
+Kaomoji
+== Каомодзи
+
+Shrug:
+== Пожать плечами:
+
+Flip:
+== Перевернуть стол:
+
+Unflip:
+== Поставить стол:
+
+Mute:
+== Мьют:
+
+Status Bar
+== Статус бар 
+
+Show status bar
+== Показывать статус бар
+
+Show labels on status bar items
+== Показывать текст на предметах статус бара
+
+Status bar height
+== Высота статус бара
+
+Local Time
+== Локальное время
+
+Use 12 hour clock
+== Использовать 12 часовую систему
+
+Show seconds on clock
+== Показывать секунды
+
+Colors
+== Цвета
+
+Status bar color
+== Цвет статус бара
+
+Text color
+== Цвет текста
+
+Status bar alpha
+== Прозрачность статус бара
+
+Text alpha
+== Прозрачность текста
+
+Status Bar Codes:
+== Коды статус бара
+
+a = Angle
+== a = Angle (Угол)
+
+p = Ping
+== p = Ping (Пинг)
+
+d = Prediction
+== d = Prediction (Предсказание)
+
+c = Position
+== c = Position (Позиция)
+
+l = Local Time
+== l = Local Time (Локал. время)
+
+r = Race Time
+== r = Race Time (Время гонки)
+
+f = FPS
+== f = FPS (Кадров в секунду)
+
+v = Velocity
+== v = Velocity (Скорость)
+
+z = Zoom
+== z = Zoom (Приближение)
+
+Add Item
+== Добавить
+
+Remove Item
+== Удалить
+
+Status Scheme:
+== Схема:
+
+Apply
+== Применить
+
+Info
+== Информация
+
+TClient Links
+== Ссылки TClient
+
+Support ♥
+== Поддержать ♥
+
+TClient Settings
+== Настройки TClient
+
+Config Files
+== Конфиг файлы
+
+TClient Developers
+== Разработчики TClient
+
+Hide Settings Tabs
+== Скрыть вкладки в настройках
+
+Your profile
+== Ваш профиль
+
+Profiles file
+== Файл с Профилями
+
+Save/Load Skin
+== Сохр./Загр. Скин
+
+Save/Load Colors
+== Сохр./Загр. Цвета
+
+Save/Load Emote
+== Сохр./Загр. Эмоц. 
+
+Save/Load Name
+== Сохр./Загр. Имя
+
+Save/Load Clan
+== Сохр./Загр. Клан
+
+Save/Load Flag
+== Сохр./Загр. Флаг
+
+Load
+== Загрузить
+
+Override
+== Изменить
+
+Command
+== Command
+
+Extra tick other tees (increases other tees latency, \nmakes dragging slightly easier when using fast input)
+== Дополнительный тик других тии (увеличивает задержку других тии,\n немного облегчает перетаскивание при использовании быстрого ввода)
+
+Prediction Margin
+== Предел предсказания
+
+Anti Ping Smoothing
+== Плавный Антипинг 
+
+Use new smoothing algorithm
+== Использовать новый анти-пинг
+
+Use warlist colors instead of regular colors
+== Используйте цвета списка вместо обычных цветов
+
+Show all warlist groups
+== Показывать все группы
+
+Last!
+== Последний!
+
+Outline kill
+== Обводка смерти
+
+Kill outline color
+== Цвет обводки смерти
+
+Reason
+== Причина
+
+Are you sure that you want to remove '%s' from your war groups?
+== Вы уверены, что хотите удалить '%s' из своих групп?
+
+Remove War Group
+== Удалить группу
+
+Color
+== Цвет
+
+Github
+== Github
+
+Integration
+== Интеграция
+
+Enable Discord Integration
+== Включить Интеграцию Discord (Discord RPC)
+
+Name: %s
+== Имя: %s
+
+Clan: %s
+== Клан: %s
+
+Skin: %s
+== Скин: %s
+
+After Load
+== После загрузки
+
+TClient
+== TClient
+
+Voting
+== Голосования
+
+Auto vote no to map changes when far
+== Авто-голосование за "нет" при смене карты если вы далеко
+
+Minimum Time
+== Минимальное время
+
+Leave empty to disable
+== Оставьте пустым чтобы отключить
+
+Message to send in chat:
+== Сообщение для отправки в чат
+
+Auto Reply
+== Авто-ответ
+
+Auto reply to muted players
+== Авто-ответ игрокам в мюте
+
+Auto reply when tabbed out
+== Авто-ответ когда не в игре
+
+Show other tees' trails
+== Показывать трейл других тии
+
+Solid
+== Статический
+
+Tee
+== Тии
+
+Speed
+== Скорость
+
+Colors in spectate select
+== Выбор цветов в наблюдателях
+
+Translated text hidden due to streamer mode
+== Переведенный текст скрыт из-за режима стримера
+
+(On Latest)
+== (Актуальная версия)
+
+(Fetching Update Info)
+== (Получение информации об обновлениях)
+
+[bgdraw]
+Failed to create bgdraw folder
+== Не удалось создать папку bgdraw
+
+[bgdraw]
+Writing item %d failed
+== Не удалось записать элемент %d
+
+[bgdraw]
+Written %d items
+== Записано элементов: %d
+
+[bgdraw]
+Loaded %d items
+== Загружено элементов: %d
+
+[bgdraw]
+Loaded %d items (discarded %d items)
+== Загружено элементов: %d (отброшено элементов: %d)
+
+Cute:
+== Мило:
+
+Lenny:
+== Ленни:
+
+Add war name:
+== Добавить имя в войну:
+
+Add war clan:
+== Добавить клан в войну:
+
+Add team name:
+== Добавить имя в команду:
+
+Add team clan:
+== Добавить клан в команду:
+
+Remove war name:
+== Убрать имя из войны:
+
+Remove team name:
+== Убрать имя из команды:
+
+Remove team clan:
+== Убрать клан из команды:
+
+Add [group] [name] [reason]:
+== Добавить [группа] [клан] [причина]:
+
+Add [group] [clan] [reason]:
+== Добавить [группа] [клан] [причина]:
+
+Remove [group] [name]:
+== Убрать игрока [группа] [имя]:
+
+Remove [group] [clan]:
+== Убрать клан [группа] [клан]:
+
+Translate:
+== Перевести:
+
+Translate ID:
+== Перевести ID:
+
+Unmute:
+== Снять мут:
+
+Bind Wheel
+== Колесо биндов
+
+War List
+== Список войн
+
+Bind Wheel Key
+== Клавиша колеса биндов
+
+[Hammer Mode]
+Normal
+== Обычный
+
+[Hammer Mode]
+Rotate with cursor
+== Вращение с курсором
+
+[Hammer Mode]
+Rotate with cursor like gun
+== Вращение с курсором как у пистолета
+
+Hammer Mode: 
+== Режим молота: 
+
+Ingame cursor scale
+== Масштаб курсора в игре
+
+Wheel animate
+== Анимация колеса
+
+Show katan on frozen players
+== Показывать катану на замороженных игроках
+
+Tiny Tees
+== Маленькие тии
+
+Tiny Tee Size
+== Размер маленьких тии
+
+Pet
+== Питомец
+
+Show the pet
+== Показать питомца
+
+Pet size
+== Размер питомца
+
+Pet alpha
+== Прозрачность питомца
+
+Pet Skin:
+== Скин питомца:
+
+Show mini vote HUD
+== Показывать мини-HUD голосования
+
+Horizontal Position
+== Горизонтальная позиция
+
+Vertical Position
+== Вертикальная позиция
+
+Font Size
+== Размер шрифта
+
+Show screen center lines
+== Показывать центральные линии экрана
+
+Screen center line color
+== Цвет центральной линии экрана
+
+Screen center line width
+== Ширина центральной линии экрана
+
+Toggle ghosts key
+== Клавиша переключения призраков
+
+Background Draw
+== Фоновое рисование
+
+ seconds (never)
+==  секунд (никогда)
+
+ seconds
+==  секунд
+
+Width
+== Ширина
+
+Draw where mouse is
+== Рисовать в месте курсора
+
+Finish Name
+== Имя при финише
+
+Attempt to change your name when near finish
+== Попытаться изменить имя при приближении к финишу
+
+Finish Name:
+== Имя при финише:
+
+Overwrite clan even if empty
+== Перезаписать клан, даже если пустой
+
+Changing name to %s near finish
+== Изменение имени на %s возле финиша
+
+[translate]
+%s translating to %s
+== %s переводит на %s
+
+[translate]
+%s to %s failed: %s
+== %s на %s не удался: %s
+
+[bgdraw]
+No items to write
+== 
+
+[bgdraw]
+No changes since last save
+== 
+
+Remove war clan:
+== 
+
+Show ping colored circle in nameplates
+== 
+
+Show country flags in nameplates
+== 
+
+Fake CTF flags
+== 
+
+Auto execute
+== 
+
+[Outlines]
+Width
+== 
+
+Unhook & hook
+== 
+
+Freeze & deep
+== 
+
+Unfreeze & undeep
+== 
+
+Kill
+== 
+
+Tele
+== 
+
+Time until strokes disappear
+== 
+
+The command is ran in console not chat
+== 
+
+_ or ' ' = Space
+== 
+
+Activating mod weapon on %d: %s\n
+== 
+
+[data_version.h]
+You have probably only installed the TClient DDNet.exe which is not supported, please use the entire TClient folder
+== 
+KernelNet
+== Melancholy
+
+All emotes in order
+== Все эмоции по порядку
+
+Random emotes
+== Случайные эмоции
+
+Single emote
+== Одна эмоция
+
+Mode
+== Режим
+
+Emote
+== Эмоция
+
+Spam Emote
+== Спам эмоциями
+
+Auto Message
+== Авто-сообщение
+
+Enable auto message
+== Включить авто-сообщение
+
+Interval
+== Интервал
+
+Message
+== Сообщение
+
+Send now
+== Отправить сейчас
+
+Misc
+== Разное
+
+Troll
+== Тролль
+
+Notes
+== Заметки
+
+The server decides how fast emotes are accepted (sv_emoticon_delay, 3 seconds by default). A shorter delay only helps on servers that allow frequent emotes. Always starts disabled when the client launches.
+== Скорость приёма эмоций определяет сервер (sv_emoticon_delay, по умолчанию 3 секунды). Короткая задержка помогает только на серверах, где разрешены частые эмоции. При каждом запуске клиента выключено.
+
+Sends the message to chat every chosen interval while you are connected to a server. Always starts disabled when the client launches. The minimum interval is 10 seconds to avoid chat flooding.
+== Отправляет сообщение в чат с выбранным интервалом, пока вы подключены к серверу. При каждом запуске клиента выключено. Минимальный интервал — 10 секунд, чтобы не флудить в чат.
+
+[melancholy delay unit]
+ms
+== мс
+
+[melancholy interval unit]
+sec
+== сек
+
+sec
+== сек
+
+ms
+== мс
+
+Aimbot
+== Аимбот
+
+Gores
+== Gores
+
+Fly
+== Полёт
+
+FNG
+== FNG
+
+Visuals
+== Визуал
+
+Recording
+== Запись
+
+KernelNet settings
+== Настройки Melancholy
+
+Uses the active KernelNet theme
+== Использует активную тему Melancholy
+
+Aimbot enabled?
+== Аимбот включён?
+
+Aimbot toggle keybind
+== Клавиша переключения аимбота
+
+Aimbot FOV
+== Поле зрения аимбота
+
+Aim FOV
+== Поле зрения прицела
+
+Aim angles
+== Углы прицеливания
+
+Aim on LMB (no automatic fire)
+== Прицел по ЛКМ (без автоогня)
+
+Aim at hookable blocks
+== Целиться в блоки, за которые можно зацепиться
+
+Players have priority; blocks are used only when no tee can be hooked.
+== Игроки в приоритете; блоки используются, только если ни одного ти нельзя зацепить хуком.
+
+Keeps the tee centered while standing on another tee.
+== Удерживает ти по центру, пока он стоит на другом ти.
+
+Hit range x0.1 tiles
+== Дальность удара (×0,1 тайла)
+
+Aggression
+== Агрессия
+
+Style
+== Стиль
+
+Style: 0=aggressive 1=careful 2=balanced
+== Стиль: 0 = агрессивный, 1 = осторожный, 2 = сбалансированный
+
+Reaction ms
+== Реакция, мс
+
+Trigger attack distance (tiles)
+== Дистанция атаки триггера (тайлы)
+
+Trigger ticks
+== Тики триггера
+
+Rays per tick
+== Лучей за тик
+
+Ticks
+== Тики
+
+FOV
+== Поле зрения
+
+Angles
+== Углы
+
+Direction
+== Направление
+
+Balance bot
+== Бот-балансир
+
+Balance on players
+== Баланс на игроках
+
+Auto-hit enabled?
+== Автоудар включён?
+
+Hammer assist
+== Помощь хаммера
+
+Hammer-gun enabled?
+== Хаммер-ган включён?
+
+Hammer gun
+== Хаммер-ган
+
+Laser triggerbot?
+== Лазерный триггербот?
+
+Dummy hit delay ms
+== Задержка удара дамми, мс
+
+Sub-Tick aiming
+== Прицеливание между тиками
+
+Weapon prediction
+== Предсказание оружия
+
+Spectators and observers
+== Зрители и наблюдатели
+
+Auto grenade save
+== Автоспасение гранатой
+
+Hook drive
+== Хук-драйв
+
+Hook tile
+== Хук-тайл
+
+Hook tile keybind
+== Клавиша хук-тайла
+
+Silent hook tile
+== Тихий хук-тайл
+
+Hook fly
+== Хук-полёт
+
+Triple fly
+== Тройной полёт
+
+Fly enabled?
+== Полёт включён?
+
+Avoid
+== Избегать
+
+Avoid freeze
+== Избегать фриза
+
+Avoid freeze enabled?
+== Избегание фриза включено?
+
+Avoid kill
+== Избегать килл-тайлов
+
+Avoid tele
+== Избегать телепортов
+
+Avoid toggle keybind
+== Клавиша переключения избегания
+
+Allow bounce
+== Разрешить рикошет
+
+Max bounces
+== Максимум рикошетов
+
+Simulation ticks
+== Тики симуляции
+
+Horizon ticks
+== Тики горизонта
+
+Waypoint keybind
+== Клавиша путевой точки
+
+FNG laser
+== Лазер FNG
+
+Laser Unfreeze
+== Разморозка лазером
+
+Auto-unfreeze
+== Авторазморозка
+
+Auto laser
+== Автолазер
+
+Auto-laser (360 scan)?
+== Автолазер (скан 360°)?
+
+Auto-shotgun
+== Автодробовик
+
+Auto-unfreeze debug recording
+== Отладочная запись авторазморозки
+
+Full freeze session recording
+== Полная запись сессии фриза
+
+Force zoom
+== Принудительный зум
+
+Laser decision indicator
+== Индикатор решения лазера
+
+Laser decision pulse
+== Пульс решения лазера
+
+Freeze warning pulse
+== Пульсация предупреждения о фризе
+
+Show attempt
+== Показывать попытку
+
+Silent
+== Тихий
+
+Companion
+== Компаньон
+
+Companion enabled
+== Компаньон включён
+
+Follow distance (tiles)
+== Дистанция следования (тайлы)
+
+AI controller
+== ИИ-контроллер
+
+AI quick mode
+== Быстрый режим ИИ
+
+FentBot
+== FentBot
+
+FentBot enabled?
+== FentBot включён?
+
+FentBot model file (relative to save dir)
+== Файл модели FentBot (относительно папки сохранений)
+
+FentBot: load model
+== FentBot: загрузить модель
+
+KoG AI enabled?
+== ИИ KoG включён?
+
+KoG model file (relative to save dir)
+== Файл модели KoG (относительно папки сохранений)
+
+KoG: export dataset
+== KoG: экспорт датасета
+
+KoG: load model
+== KoG: загрузить модель
+
+KoG: save model
+== KoG: сохранить модель
+
+KoG: status
+== KoG: статус
+
+KoG: train offline
+== KoG: обучение офлайн
+
+Online learning
+== Онлайн-обучение
+
+Difficulty
+== Сложность
+
+0=off 1=fentbot 2=python 3=bc 4=companion 5=kog
+== 0 = выкл, 1 = fentbot, 2 = python, 3 = bc, 4 = companion, 5 = kog
+
+Utility
+== Утилиты
+
+Auto aled enabled?
+== Авто-алед включён?
+
+Fake ping (ms, 0=off)
+== Фейковый пинг (мс, 0 = выкл)
+
+Click GUI
+== Click GUI
+
+Show ClickGUI
+== Показывать ClickGUI
+
+Open / close direct key
+== Клавиша прямого открытия / закрытия
+
+Combat and prediction
+== Бой и предсказание
+
+Player tools
+== Инструменты игрока
+
+Steal nearest name and skin.
+== Копировать имя и скин ближайшего игрока.
+
+Emoji button in chat
+== Кнопка эмодзи в чате
+
+Visual effects and animation
+== Визуальные эффекты и анимации
+
+Enable visual effects
+== Включить визуальные эффекты
+
+Visual profile
+== Визуальный профиль
+
+Effects intensity
+== Интенсивность эффектов
+
+Adaptive effects
+== Адаптивные эффекты
+
+Performance
+== Производительность
+
+Frame rate
+== Частота кадров
+
+Resolution
+== Разрешение
+
+Low quality
+== Низкое качество
+
+Medium quality
+== Среднее качество
+
+High quality
+== Высокое качество
+
+Clean
+== Чистый
+
+Classic
+== Классический
+
+Vivid
+== Яркий
+
+Other player trails
+== Следы других игроков
+
+Trail style
+== Стиль следа
+
+Trail color mode
+== Режим цвета следа
+
+Trail sparkle
+== Искры следа
+
+Trail thickness
+== Толщина следа
+
+Cursor trail
+== След курсора
+
+Weapon effects
+== Эффекты оружия
+
+Weapon effect colors
+== Цвета эффектов оружия
+
+Dynamic weapon lights
+== Динамический свет оружия
+
+Models and actions
+== Модели и действия
+
+Tee motion
+== Движение ти
+
+Player transitions
+== Переходы игроков
+
+Player chat bubbles
+== Облачки чата игроков
+
+Chat bubble duration
+== Длительность облачков чата
+
+Menu particles
+== Частицы меню
+
+Particle amount
+== Количество частиц
+
+Animated menu accents
+== Анимированные акценты меню
+
+Animation speed
+== Скорость анимации
+
+Click GUI animations
+== Анимации Click GUI
+
+Click GUI backdrop effects
+== Эффекты подложки Click GUI
+
+Click ripple
+== Волна при клике
+
+Ripple strength
+== Сила волны
+
+Backdrop softness
+== Мягкость подложки
+
+Gameplay screen accents
+== Акценты игрового экрана
+
+Shader bloom
+== Шейдерное свечение (bloom)
+
+Bloom spread
+== Размытие свечения
+
+HDR exposure
+== Экспозиция HDR
+
+Ambient sweep
+== Фоновая волна
+
+Map atmosphere
+== Атмосфера карты
+
+World light depth
+== Глубина мирового света
+
+Liquid Glass
+== Liquid Glass
+
+Glass intensity
+== Интенсивность стекла
+
+Glass refraction
+== Преломление стекла
+
+Fast video rendering
+== Быстрый рендеринг видео
+
+Focus brackets
+== Скобки фокуса
+
+Feature notifications
+== Уведомления о функциях
+
+Use vanilla DDNet visuals
+== Использовать ванильную графику DDNet
+
+Record audio
+== Запись звука
+
+Recording format
+== Формат записи
+
+Video output
+== Вывод видео
+
+Show HUD
+== Показывать HUD
+
+Show chat
+== Показывать чат
+
+Hammer
+== Молот
+
+Gun
+== Пистолет
+
+Grenade
+== Граната
+
+Hook
+== Хук
+
+Laser
+== Лазер
+
+Jump
+== Прыжок
+
+Aim
+== Прицел
+
+disable if extra weapons
+== отключать при доп. оружии
+
+follow aim
+== следовать за прицелом
+
+ignore friends
+== игнорировать друзей
+
+prefer frozen hook
+== предпочитать хук по замороженным
+
+show FOV
+== показывать поле зрения
+
+show path
+== показывать путь
+
+silent
+== тихий
+
+Debug logging
+== Отладочные логи
+
+Verbose logs
+== Подробные логи
+
+Relaxed server mode
+== Расслабленный режим сервера
+
+Freeze & deep
+== Фриз и дип
+
+Unfreeze & undeep
+== Разморозка и выход из дипа
+
+Balanced
+== Сбалансированный
+
+Theme and aspect ratio
+== Тема и соотношение сторон
+
+Пинговый режим
+== Пинговый режим
+
+Фаст режим
+== Фаст режим
+
+Режим аимбота
+== Режим аимбота
+
+Режимы: 0 легкий, 1 средний, 2 сильный.
+== Режимы: 0 лёгкий, 1 средний, 2 сильный.
+
+Бьёт врага, когда вы зажимаете хаммер.
+== Бьёт врага, когда вы зажимаете хаммер.
+
+Держит пистолет, а выстрел заменяет ударом хаммера.
+== Держит пистолет, а выстрел заменяет ударом хаммера.
+
+Обходит фриз.
+== Обходит фриз.
+
+Работает напрямую с подключенным дамми.
+== Работает напрямую с подключённым дамми.
+
+Smart Double Jump
+== Умный двойной прыжок
+
+Auto-jump near freeze
+== Авто-прыжок рядом с фризом
+
+Version Spoof
+== Спуфер версии
+
+Spoof version to server
+== Подменять версию серверу
+
+Preset
+== Профиль
+
+Custom
+== Свой
+
+DDNet
+== DDNet
+
+Cactus
+== Cactus
+
+EClient
+== EClient
+
+RClient
+== RClient
+
+FeX
+== FeX
+
+StA
+== StA
+
+Full Version String
+== Полная строка версии
+
+DDNet Version
+== Версия DDNet
+
+Dummy Manager
+== Менеджер дамми
+
+Main
+== Основной
+
+Dummy 1
+== Дамми 1
+
+Dummy 1 (off)
+== Дамми 1 (выкл)
+
+Dummy 2
+== Дамми 2
+
+Dummy 2 (off)
+== Дамми 2 (выкл)
+
+Connect Dummy 2
+== Подключить дамми 2
+
+Disconnect Dummy 2
+== Отключить дамми 2
+
+Connecting Dummy 2...
+== Подключение дамми 2...
+
+Avoid New
+== Avoid New
+
+Close-range avoid
+== Ближний avoid
+
+Auto-jump under feet
+== Авто-прыжок под ногами
+
+Stop on sides
+== Стоп по бокам
+
+Keeps you right next to freeze tiles without entering them. Jumps if freeze is under your feet, stops if freeze is in movement direction, doesn't jump if freeze is above.
+== Держит тебя впритык к фризу, но не даёт зайти в него. Прыгает, если фриз под ногами. Останавливает, если фриз в направлении движения. Не даёт прыгать, если фриз сверху.
+
+Predict ticks
+== Тиков вперёд
+
+Speed threshold
+== Порог скорости
+
+Avoid tuning
+== Настройки Avoid
+
+Sensitivity x5 boost
+== Чувствительность ×5
+
+Fast fire (hammer + laser)
+== Быстрый огонь (хаммер + лазер)
+
+Fast fire delay
+== Задержка Fast fire
+
+Sensitivity x5000 boost
+== Чувствительность ×5000
+
+Fake Aim
+== Fake Aim
+
+Show me
+== Показывать у себя
+
+Rescue aggression
+== Агрессия спасения
+
+KOG profile
+== Профиль KOG
+
+Aggressive profile
+== Агрессивный профиль
+
