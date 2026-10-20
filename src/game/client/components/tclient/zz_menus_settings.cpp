@@ -44,7 +44,7 @@ using namespace std::chrono_literals;
 void CMenus::RenderSettingsKernelNet(CUIRect MainView)
 {
 	static int s_SubTab = 0;
-	static CButtonContainer s_aSubTabs[7] = {};
+	static CButtonContainer s_aSubTabs[8] = {};
 	static int64_t s_SubTabAnimStart = 0;
 	static int s_SubTabAnimFrom = 0;
 	static int s_SubTabAnimTo = 0;
@@ -54,14 +54,14 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
 
 	CUIRect TabBar, Button;
 	MainView.HSplitTop(26.0f, &TabBar, &MainView);
-	const float TabWidth = TabBar.w / 7.0f;
+	const float TabWidth = TabBar.w / 8.0f;
 	const char *apTabNames[] = {Localize("Aimbot"), Localize("Avoid New"),
                 Localize("Misc"), Localize("Fly"),
                 Localize("FNG"), Localize("Visuals"),
                 "Recording"};
-	if(s_SubTab >= 7)
+	if(s_SubTab >= 8)
 		s_SubTab = 0;
-	for(int i = 0; i < 7; i++)
+	for(int i = 0; i < 8; i++)
 	{
 		TabBar.VSplitLeft(TabWidth, &Button, &TabBar);
 		Button.VMargin(1.5f, &Button);
@@ -1305,4 +1305,57 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
                         &g_Config.m_ZzSpoofGitHashEnabled, &Inner, LineSize);
         }
 
+        else if(s_SubTab == 7)
+        {
+                const float LineSize = 20.0f;
+                CUIRect Inner;
+                DoFeaturePanel(MainView, 250.0f, Localize("Spoofer"), Inner);
+
+                DoButton_CheckBoxAutoVMarginAndSet(
+                        &g_Config.m_ZzSpoofClientStr, Localize("Enable Spoofer"),
+                        &g_Config.m_ZzSpoofClientStr, &Inner, LineSize);
+
+                {
+                        CUIRect RowLabel, RowDropDown;
+                        Inner.HSplitTop(LineSize, &RowLabel, &Inner);
+                        Ui()->DoLabel(&RowLabel, Localize("Client preset"), 14.0f, TEXTALIGN_ML);
+                        std::array<const char *, 4> aZzPresetNames = {"DDNet", "TClient", "BestClient", "Custom"};
+                        static CUi::SDropDownState s_ZzSpoofPresetDropDownState;
+                        static CScrollRegion s_ZzSpoofPresetDropDownScrollRegion;
+                        s_ZzSpoofPresetDropDownState.m_SelectionPopupContext.m_pScrollRegion = &s_ZzSpoofPresetDropDownScrollRegion;
+                        const int OldVal = std::clamp(g_Config.m_ZzSpoofClientPreset, 0, 3);
+                        Inner.HSplitTop(LineSize, &RowDropDown, &Inner);
+                        const int NewVal = Ui()->DoDropDown(&RowDropDown, OldVal, aZzPresetNames.data(), aZzPresetNames.size(), s_ZzSpoofPresetDropDownState);
+                        if(NewVal != OldVal)
+                        {
+                                g_Config.m_ZzSpoofClientPreset = NewVal;
+                                if(NewVal == 0) {
+                                        str_copy(g_Config.m_ZzSpoofClientName, "DDNet", sizeof(g_Config.m_ZzSpoofClientName));
+                                        str_copy(g_Config.m_ZzSpoofClientVersion, "19.8.2", sizeof(g_Config.m_ZzSpoofClientVersion));
+                                        g_Config.m_ZzSpoofVersionId = 19082;
+                                } else if(NewVal == 1) {
+                                        str_copy(g_Config.m_ZzSpoofClientName, "TClient", sizeof(g_Config.m_ZzSpoofClientName));
+                                        str_copy(g_Config.m_ZzSpoofClientVersion, "10.9.0", sizeof(g_Config.m_ZzSpoofClientVersion));
+                                        g_Config.m_ZzSpoofVersionId = 20010;
+                                        str_copy(g_Config.m_ZzSpoofGitHash, "2e2aedc2e7b463a10b324a0f69d3fdb57", sizeof(g_Config.m_ZzSpoofGitHash));
+                                        g_Config.m_ZzSpoofGitHashEnabled = 1;
+                                } else if(NewVal == 2) {
+                                        str_copy(g_Config.m_ZzSpoofClientName, "BestClient", sizeof(g_Config.m_ZzSpoofClientName));
+                                        str_copy(g_Config.m_ZzSpoofClientVersion, "2.1.1 stable-beta", sizeof(g_Config.m_ZzSpoofClientVersion));
+                                        g_Config.m_ZzSpoofVersionId = 19080;
+                                        str_copy(g_Config.m_ZzSpoofGitHash, "0df5194057d68a7708b282c5c8245308", sizeof(g_Config.m_ZzSpoofGitHash));
+                                        g_Config.m_ZzSpoofGitHashEnabled = 1;
+                                }
+                        }
+                }
+
+                CUIRect ZzButton;
+                Inner.HSplitTop(LineSize, &ZzButton, &Inner);
+                Ui()->DoScrollbarOption(&g_Config.m_ZzSpoofVersionId,
+                        &g_Config.m_ZzSpoofVersionId, &ZzButton, Localize("Version ID"), 10000, 21000);
+
+                DoButton_CheckBoxAutoVMarginAndSet(
+                        &g_Config.m_ZzSpoofGitHashEnabled, Localize("Spoof Git hash"),
+                        &g_Config.m_ZzSpoofGitHashEnabled, &Inner, LineSize);
+        }
 }
