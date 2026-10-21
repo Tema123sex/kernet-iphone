@@ -58,7 +58,9 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
 	const char *apTabNames[] = {Localize("Aimbot"), Localize("Avoid New"),
                 Localize("Misc"), Localize("Fly"),
                 Localize("FNG"), Localize("Visuals"),
-                "Recording"};
+                "Recording",
+		Localize("Avoid")};
+	static_assert(sizeof(apTabNames) / sizeof(apTabNames[0]) == 8, "apTabNames must match the tab count");
 	if(s_SubTab >= 8)
 		s_SubTab = 0;
 	for(int i = 0; i < 8; i++)
