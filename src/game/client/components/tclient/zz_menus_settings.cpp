@@ -268,6 +268,18 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
         CUIRect LeftView, RightView;
         MainView.VSplitMid(&LeftView, &RightView, 20.0f);
 
+        static CScrollRegion s_MiscScrollRegion;
+        static vec2 s_MiscScrollOffset(0.0f, 0.0f);
+        CScrollRegionParams ScrollParams;
+        ScrollParams.m_ScrollUnit = 48.0f;
+        ScrollParams.m_ScrollbarWidth = 16.0f;
+        ScrollParams.m_ScrollbarMargin = 3.0f;
+        ScrollParams.m_Flags = CScrollRegionParams::FLAG_CONTENT_STATIC_WIDTH;
+        s_MiscScrollRegion.Begin(&MainView, &s_MiscScrollOffset, &ScrollParams);
+        MainView.y += s_MiscScrollOffset.y;
+        CUIRect LeftView, RightView;
+        MainView.VSplitMid(&LeftView, &RightView, 20.0f);
+
 		CUIRect LeftView, RightView;
 		MainView.VSplitMid(&LeftView, &RightView, 20.0f);
 
@@ -1047,6 +1059,12 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
                 }
         }
 	
+        CUIRect ContentEnd = MainView;
+        ContentEnd.y = maximum(LeftView.y, RightView.y);
+        ContentEnd.h = 0.0f;
+        s_MiscScrollRegion.AddRect(ContentEnd);
+        s_MiscScrollRegion.End();
+
         CUIRect ContentEnd = MainView;
         ContentEnd.y = maximum(LeftView.y, RightView.y);
         ContentEnd.h = 0.0f;
