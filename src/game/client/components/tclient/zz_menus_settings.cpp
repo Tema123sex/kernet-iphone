@@ -441,15 +441,6 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
 	}
 	else if(s_SubTab == 2)
 	{
-        static CScrollRegion s_MiscScrollRegion;
-        static vec2 s_MiscScrollOffset(0.0f, 0.0f);
-        CScrollRegionParams MiscScrollParams;
-        MiscScrollParams.m_ScrollUnit = 48.0f;
-        MiscScrollParams.m_ScrollbarWidth = 16.0f;
-        MiscScrollParams.m_ScrollbarMargin = 3.0f;
-        MiscScrollParams.m_Flags = CScrollRegionParams::FLAG_CONTENT_STATIC_WIDTH;
-        s_MiscScrollRegion.Begin(&MainView, &s_MiscScrollOffset, &MiscScrollParams);
-        MainView.y += s_MiscScrollOffset.y;
 
 
 		CUIRect LeftView, RightView;
@@ -458,7 +449,7 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
 		// Zz: Spoofer (Aether style)
 		{
 			CUIRect Inner;
-			DoFeaturePanel(LeftView, 220.0f, Localize("Spoofer"), Inner);
+			DoFeaturePanel(LeftView, 180.0f, Localize("Spoofer"), Inner);
 			const float LineSize = 20.0f;
 
 			DoButton_CheckBoxAutoVMarginAndSet(
@@ -510,7 +501,7 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
         // Zz: Восстановленные блоки
         {
                 CUIRect Inner;
-                DoFeaturePanel(LeftView, 220.0f, Localize("Laser Unfreeze"), Inner);
+                DoFeaturePanel(LeftView, 180.0f, Localize("Laser Unfreeze"), Inner);
                 DoButton_CheckBoxAutoVMarginAndSet(
                         &g_Config.m_ClZzAutoUnfreeze, Localize("Auto-unfreeze"),
                         &g_Config.m_ClZzAutoUnfreeze, &Inner, LineSize);
@@ -530,7 +521,7 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
 
         {
                 CUIRect Inner;
-                DoFeaturePanel(RightView, 305.0f, Localize("Utility"), Inner);
+                DoFeaturePanel(RightView, 250.0f, Localize("Utility"), Inner);
                 DoButton_CheckBoxAutoVMarginAndSet(
                         &g_Config.m_ClZzAutoAled, Localize("Auto aled enabled?"),
                         &g_Config.m_ClZzAutoAled, &Inner, LineSize);
@@ -660,7 +651,7 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
         // Zz: Spoofer (Aether style)
         {
                 CUIRect Inner;
-                DoFeaturePanel(LeftView, 220.0f, Localize("Spoofer"), Inner);
+                DoFeaturePanel(LeftView, 180.0f, Localize("Spoofer"), Inner);
                 const float LineSize = 20.0f;
 
                 DoButton_CheckBoxAutoVMarginAndSet(
@@ -748,12 +739,6 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
                                 Client()->DummyConnect(IClient::CONN_DUMMY2);
                 }
         }
-	
-        CUIRect MiscContentEnd = MainView;
-        MiscContentEnd.y = maximum(LeftView.y, RightView.y);
-        MiscContentEnd.h = 0.0f;
-        s_MiscScrollRegion.AddRect(MiscContentEnd);
-        s_MiscScrollRegion.End();
 }
 	else if(s_SubTab == 3)
 	{
@@ -767,11 +752,6 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
 			Localize("Hook fly"), &g_Config.m_ClZzHookFly, &Inner, LineSize);
 		DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzTripleFly,
 			Localize("Triple
-        CUIRect MiscContentEnd = MainView;
-        MiscContentEnd.y = maximum(LeftView.y, RightView.y);
-        MiscContentEnd.h = 0.0f;
-        s_MiscScrollRegion.AddRect(MiscContentEnd);
-        s_MiscScrollRegion.End();
  fly"), &g_Config.m_ClZzTripleFly, &Inner, LineSize);
 		Inner.HSplitTop(LineSize, &Button, &Inner);
 		Ui()->DoScrollbarOption(&g_Config.m_ClZzFlyHelperHitTiles,
