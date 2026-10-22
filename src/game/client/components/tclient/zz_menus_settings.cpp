@@ -45,7 +45,7 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
 {
 	const float LineSize = 20.0f;
 	static int s_SubTab = 0;
-	static CButtonContainer s_aSubTabs[8] = {};
+	static CButtonContainer s_aSubTabs[7] = {};
 	static int64_t s_SubTabAnimStart = 0;
 	static int s_SubTabAnimFrom = 0;
 	static int s_SubTabAnimTo = 0;
@@ -55,16 +55,15 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
 
 	CUIRect TabBar, Button;
 	MainView.HSplitTop(26.0f, &TabBar, &MainView);
-	const float TabWidth = TabBar.w / 8.0f;
+	const float TabWidth = TabBar.w / 7.0f;
 	const char *apTabNames[] = {Localize("Aimbot"), Localize("Avoid New"),
                 Localize("Misc"), Localize("Fly"),
                 Localize("FNG"), Localize("Visuals"),
-                "Recording",
-		Localize("Avoid")};
+                "Recording"};
 	static_assert(sizeof(apTabNames) / sizeof(apTabNames[0]) == 8, "apTabNames must match the tab count");
-	if(s_SubTab >= 8)
+	if(s_SubTab >= 7)
 		s_SubTab = 0;
-	for(int i = 0; i < 8; i++)
+	for(int i = 0; i < 7; i++)
 	{
 		TabBar.VSplitLeft(TabWidth, &Button, &TabBar);
 		Button.VMargin(1.5f, &Button);
@@ -749,6 +748,12 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
                 }
         }
 	
+        s_MiscScrollRegion.End();
+
+        CUIRect ContentEnd = MainView;
+        ContentEnd.y = maximum(LeftView.y, RightView.y);
+        ContentEnd.h = 0.0f;
+        s_MiscScrollRegion.AddRect(ContentEnd);
         s_MiscScrollRegion.End();
 }
 	else if(s_SubTab == 3)
