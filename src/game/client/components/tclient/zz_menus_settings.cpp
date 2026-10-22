@@ -442,6 +442,16 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
 	}
 	else if(s_SubTab == 2)
 	{
+        static CScrollRegion s_MiscScrollRegion;
+        static vec2 s_MiscScrollOffset(0.0f, 0.0f);
+        CScrollRegionParams ScrollParams;
+        ScrollParams.m_ScrollUnit = 48.0f;
+        ScrollParams.m_ScrollbarWidth = 16.0f;
+        ScrollParams.m_ScrollbarMargin = 3.0f;
+        ScrollParams.m_Flags = CScrollRegionParams::FLAG_CONTENT_STATIC_WIDTH;
+        s_MiscScrollRegion.Begin(&MainView, &s_MiscScrollOffset, &ScrollParams);
+        MainView.y += s_MiscScrollOffset.y;
+
 		CUIRect LeftView, RightView;
 		MainView.VSplitMid(&LeftView, &RightView, 20.0f);
 
@@ -738,7 +748,9 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
                                 Client()->DummyConnect(IClient::CONN_DUMMY2);
                 }
         }
-	}
+	
+        s_MiscScrollRegion.End();
+}
 	else if(s_SubTab == 3)
 	{
 		const float LineSize = 20.0f;
@@ -1491,64 +1503,7 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
 			}
 		}
 	}
-	else if(s_SubTab == 7)
-	{
-		const float LineSize = 20.0f;
-		CUIRect Left, Right;
-		MainView.VSplitMid(&Left, &Right, 20.0f);
-
-		{
-			CUIRect Inner, Button;
-			DoFeaturePanel(Left, 340.0f, Localize("Avoid"), Inner);
-			DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzAvoidEnabled,
-				Localize("Avoid freeze enabled?"), &g_Config.m_ClZzAvoidEnabled, &Inner, LineSize);
-			DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzAvoidFreeze,
-				Localize("Avoid freeze"), &g_Config.m_ClZzAvoidFreeze, &Inner, LineSize);
-			DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzAvoidTele,
-				Localize("Avoid tele"), &g_Config.m_ClZzAvoidTele, &Inner, LineSize);
-			DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzAvoidKill,
-				Localize("Avoid kill"), &g_Config.m_ClZzAvoidKill, &Inner, LineSize);
-			DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzAvoidDirection,
-				Localize("Allow direction"), &g_Config.m_ClZzAvoidDirection, &Inner, LineSize);
-			DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzAvoidJump,
-				Localize("Allow jump"), &g_Config.m_ClZzAvoidJump, &Inner, LineSize);
-			DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzAvoidHookAssist,
-				Localize("Hook assist"), &g_Config.m_ClZzAvoidHookAssist, &Inner, LineSize);
-			DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzAvoidAim,
-				Localize("Allow aim"), &g_Config.m_ClZzAvoidAim, &Inner, LineSize);
-			DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzAvoidSilent,
-				Localize("Silent"), &g_Config.m_ClZzAvoidSilent, &Inner, LineSize);
-		}
-
-		{
-			CUIRect Inner, Button;
-			DoFeaturePanel(Right, 340.0f, Localize("Avoid tuning"), Inner);
-			Inner.HSplitTop(LineSize, &Button, &Inner);
-			Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidLookahead,
-				&g_Config.m_ClZzAvoidLookahead, &Button,
-				Localize("Lookahead"), 4, 128);
-			Inner.HSplitTop(LineSize, &Button, &Inner);
-			Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidHookAssistRange,
-				&g_Config.m_ClZzAvoidHookAssistRange, &Button,
-				Localize("Hook range"), 16, 512);
-			Inner.HSplitTop(LineSize, &Button, &Inner);
-			Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidTicks,
-				&g_Config.m_ClZzAvoidTicks, &Button,
-				Localize("Simulation ticks"), 1, 20);
-			Inner.HSplitTop(LineSize, &Button, &Inner);
-			Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidTriggerTicks,
-				&g_Config.m_ClZzAvoidTriggerTicks, &Button,
-				Localize("Trigger ticks"), 1, 20);
-			Inner.HSplitTop(LineSize, &Button, &Inner);
-			Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidFov,
-				&g_Config.m_ClZzAvoidFov, &Button,
-				Localize("FOV"), 5, 360);
-			Inner.HSplitTop(LineSize, &Button, &Inner);
-			Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidAngles,
-				&g_Config.m_ClZzAvoidAngles, &Button,
-				Localize("Angles"), 1, 144);
-		}
-	}
+	
 
 	TextRender()->TextColor(OldTextColor);
 }
