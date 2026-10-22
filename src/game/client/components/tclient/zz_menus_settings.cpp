@@ -60,7 +60,7 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
                 Localize("Misc"), Localize("Fly"),
                 Localize("FNG"), Localize("Visuals"),
                 "Recording"};
-	static_assert(sizeof(apTabNames) / sizeof(apTabNames[0]) == 8, "apTabNames must match the tab count");
+	static_assert(sizeof(apTabNames) / sizeof(apTabNames[0]) == 7, "apTabNames must match the tab count");
 	if(s_SubTab >= 7)
 		s_SubTab = 0;
 	for(int i = 0; i < 7; i++)
@@ -748,12 +748,6 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
                 }
         }
 	
-        s_MiscScrollRegion.End();
-
-        CUIRect ContentEnd = MainView;
-        ContentEnd.y = maximum(LeftView.y, RightView.y);
-        ContentEnd.h = 0.0f;
-        s_MiscScrollRegion.AddRect(ContentEnd);
         s_MiscScrollRegion.End();
 
         CUIRect ContentEnd = MainView;
