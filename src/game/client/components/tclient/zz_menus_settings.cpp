@@ -43,6 +43,7 @@ using namespace std::chrono_literals;
 
 void CMenus::RenderSettingsKernelNet(CUIRect MainView)
 {
+	const float LineSize = 20.0f;
 	static int s_SubTab = 0;
 	static CButtonContainer s_aSubTabs[8] = {};
 	static int64_t s_SubTabAnimStart = 0;
