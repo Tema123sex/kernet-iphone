@@ -43,7 +43,6 @@ using namespace std::chrono_literals;
 
 void CMenus::RenderSettingsKernelNet(CUIRect MainView)
 {
-	const float LineSize = 20.0f;
 	static int s_SubTab = 0;
 	static CButtonContainer s_aSubTabs[8] = {};
 	static int64_t s_SubTabAnimStart = 0;
@@ -241,45 +240,207 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
 				14.0f, TEXTALIGN_ML);
 		}
 	}
-	
+	else if(s_SubTab == 1)
+	{
+		const float LineSize = 20.0f;
+		CUIRect Left, Right;
+		MainView.VSplitMid(&Left, &Right, 20.0f);
+
+		// Left: Avoid + Hammer-gun
+		{
+			CUIRect Inner;
+			DoFeaturePanel(Left, 385.0f, Localize("Avoid"), Inner);
+			DoButton_CheckBoxAutoVMarginAndSet(
+				&g_Config.m_ClZzAvoidEnabled, Localize("Avoid freeze enabled?"),
+				&g_Config.m_ClZzAvoidEnabled, &Inner, LineSize);
+			DoButton_CheckBoxAutoVMarginAndSet(
+				&g_Config.m_ClZzAvoidFreeze, Localize("Avoid freeze"),
+				&g_Config.m_ClZzAvoidFreeze, &Inner, LineSize);
+			DoButton_CheckBoxAutoVMarginAndSet(
+				&g_Config.m_ClZzAvoidTele, Localize("Avoid tele"),
+				&g_Config.m_ClZzAvoidTele, &Inner, LineSize);
+			DoButton_CheckBoxAutoVMarginAndSet(
+				&g_Config.m_ClZzAvoidKill, Localize("Avoid kill"),
+				&g_Config.m_ClZzAvoidKill, &Inner, LineSize);
+			DoButton_CheckBoxAutoVMarginAndSet(
+				&g_Config.m_ClZzAvoidDirection, Localize("Direction"),
+				&g_Config.m_ClZzAvoidDirection, &Inner, LineSize);
+			DoButton_CheckBoxAutoVMarginAndSet(
+				&g_Config.m_ClZzAvoidJump, Localize("Jump"),
+				&g_Config.m_ClZzAvoidJump, &Inner, LineSize);
+			DoButton_CheckBoxAutoVMarginAndSet(
+				&g_Config.m_ClZzAvoidHookAssist, Localize("Hook"),
+				&g_Config.m_ClZzAvoidHookAssist, &Inner, LineSize);
+			DoButton_CheckBoxAutoVMarginAndSet(
+				&g_Config.m_ClZzAvoidAim, Localize("Aim"),
+				&g_Config.m_ClZzAvoidAim, &Inner, LineSize);
+			Inner.HSplitTop(LineSize, &Button, &Inner);
+			Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidFov,
+				&g_Config.m_ClZzAvoidFov, &Button, Localize("Aim FOV"), 5, 360);
+			Inner.HSplitTop(LineSize, &Button, &Inner);
+			Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidAngles,
+				&g_Config.m_ClZzAvoidAngles, &Button, Localize("Aim angles"), 1,
+				144);
+			DoButton_CheckBoxAutoVMarginAndSet(
+				&g_Config.m_ClZzAvoidSilent, Localize("Silent"),
+				&g_Config.m_ClZzAvoidSilent, &Inner, LineSize);
+			Inner.HSplitTop(LineSize, &Button, &Inner);
+			Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidTicks,
+				&g_Config.m_ClZzAvoidTicks, &Button, Localize("Simulation ticks"),
+				1, 20);
+			Inner.HSplitTop(LineSize, &Button, &Inner);
+			Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidTriggerTicks,
+				&g_Config.m_ClZzAvoidTriggerTicks, &Button,
+				Localize("Trigger ticks"), 1, 20);
+
+		Inner.HSplitTop(LineSize, &Button, &Inner);
+		Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidPingComp,
+			&g_Config.m_ClZzAvoidPingComp, &Button,
+			Localize("Ping compensation %"), 0, 100);
+		Inner.HSplitTop(LineSize, &Button, &Inner);
+		Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidPingMaxTicks,
+			&g_Config.m_ClZzAvoidPingMaxTicks, &Button,
+			Localize("Ping max ticks"), 0, 20);
+		Inner.HSplitTop(LineSize, &Button, &Inner);
+		Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidOverrideTimeout,
+			&g_Config.m_ClZzAvoidOverrideTimeout, &Button,
+			Localize("Override timeout"), 5, 200);
+		Inner.HSplitTop(LineSize, &Button, &Inner);
+		Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidSegmentSteps,
+			&g_Config.m_ClZzAvoidSegmentSteps, &Button,
+			Localize("Segment steps"), 1, 64);
+		Inner.HSplitTop(LineSize, &Button, &Inner);
+		Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidClearanceRadius,
+			&g_Config.m_ClZzAvoidClearanceRadius, &Button,
+			Localize("Clearance radius"), 1, 8);
+
+			Inner.HSplitTop(LineSize, &Button, &Inner);
+			Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidRescueAggression,
+				&g_Config.m_ClZzAvoidRescueAggression, &Button,
+				Localize("Rescue aggression"), 0, 100);
+			DoButton_CheckBoxAutoVMarginAndSet(
+				&g_Config.m_ClZzAvoidKogProfile, Localize("KOG profile"),
+				&g_Config.m_ClZzAvoidKogProfile, &Inner, LineSize);
+			Inner.HSplitTop(LineSize, &Button, &Inner);
+			Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidAggressiveProfile,
+				&g_Config.m_ClZzAvoidAggressiveProfile, &Button,
+				Localize("Aggressive profile"), 0, 2);
+			Inner.HSplitTop(5.0f, nullptr, &Inner);
+			Inner.HSplitTop(LineSize, &Label, &Inner);
+			Ui()->DoLabel(&Label, Localize("Avoid toggle keybind"), 14.0f,
+				TEXTALIGN_ML);
+			Inner.HSplitTop(LineSize, &Button, &Inner);
+			static CButtonContainer s_AvoidKeyReader;
+			static CButtonContainer s_AvoidKeyClear;
+			CBindSlot CurrentBindAvoid((int)g_Config.m_ClZzAvoidToggleKey,
+				(int)g_Config.m_ClZzAvoidToggleMod);
+			const auto ResAvoid = GameClient()->m_KeyBinder.DoKeyReader(
+				&s_AvoidKeyReader, &s_AvoidKeyClear, &Button, CurrentBindAvoid,
+				false);
+			if(!ResAvoid.m_Aborted &&
+				(ResAvoid.m_Bind.m_Key != CurrentBindAvoid.m_Key ||
+					ResAvoid.m_Bind.m_ModifierMask != CurrentBindAvoid.m_ModifierMask))
+			{
+				if(CurrentBindAvoid.m_Key >= KEY_FIRST &&
+					CurrentBindAvoid.m_Key < KEY_LAST)
+					GameClient()->m_Binds.Bind(CurrentBindAvoid.m_Key, "", false,
+						CurrentBindAvoid.m_ModifierMask);
+				g_Config.m_ClZzAvoidToggleKey = ResAvoid.m_Bind.m_Key;
+				g_Config.m_ClZzAvoidToggleMod = ResAvoid.m_Bind.m_ModifierMask;
+				if(ResAvoid.m_Bind.m_Key >= KEY_FIRST &&
+					ResAvoid.m_Bind.m_Key < KEY_LAST)
+					GameClient()->m_Binds.Bind(ResAvoid.m_Bind.m_Key, "toggle cl_zz_avoid_enabled 0 1",
+						false, ResAvoid.m_Bind.m_ModifierMask);
+			}
+			Inner.HSplitTop(5.0f, nullptr, &Inner);
+			Inner.HSplitTop(LineSize, &Label, &Inner);
+			Ui()->DoLabel(&Label, Localize("Обходит фриз."), 14.0f, TEXTALIGN_ML);
+		}
+		{
+			CUIRect Inner;
+			DoFeaturePanel(Left, 110.0f, Localize("Hammer gun"), Inner);
+			DoButton_CheckBoxAutoVMarginAndSet(
+				&g_Config.m_ClZzHammerGun, Localize("Hammer-gun enabled?"),
+				&g_Config.m_ClZzHammerGun, &Inner, LineSize);
+			DoButton_CheckBoxAutoVMarginAndSet(
+				&g_Config.m_ClZzHammerGunAutoDisableExtraWeapons,
+				Localize("disable if extra weapons"),
+				&g_Config.m_ClZzHammerGunAutoDisableExtraWeapons, &Inner, LineSize);
+			Inner.HSplitTop(5.0f, nullptr, &Inner);
+			Inner.HSplitTop(LineSize, &Label, &Inner);
+			Ui()->DoLabel(
+				&Label,
+				Localize("Держит пистолет, а выстрел заменяет ударом хаммера."),
+				14.0f, TEXTALIGN_ML);
+		}
+
+		// Right: movement helpers.
+		{
+			CUIRect Inner;
+			DoFeaturePanel(Right, 95.0f, Localize("Balance bot"), Inner);
+			DoButton_CheckBoxAutoVMarginAndSet(
+				&g_Config.m_ClZzBalanceBot, Localize("Balance on players"),
+				&g_Config.m_ClZzBalanceBot, &Inner, LineSize);
+			Inner.HSplitTop(5.0f, nullptr, &Inner);
+			Inner.HSplitTop(LineSize, &Label, &Inner);
+			Ui()->DoLabel(
+				&Label,
+				Localize("Keeps the tee centered while standing on another tee."),
+				14.0f, TEXTALIGN_ML);
+		}
+
+		if(false)
+		{
+			CUIRect Inner;
+			DoFeaturePanel(Right, 215.0f, Localize("FentBot"), Inner);
+			DoButton_CheckBoxAutoVMarginAndSet(
+				&g_Config.m_ClZzFentBotEnabled, Localize("FentBot enabled?"),
+				&g_Config.m_ClZzFentBotEnabled, &Inner, LineSize);
+			DoButton_CheckBoxAutoVMarginAndSet(
+				&g_Config.m_ClZzFentBotAimFollow, Localize("follow aim"),
+				&g_Config.m_ClZzFentBotAimFollow, &Inner, LineSize);
+			DoButton_CheckBoxAutoVMarginAndSet(
+				&g_Config.m_ClZzFentBotShowPath, Localize("show path"),
+				&g_Config.m_ClZzFentBotShowPath, &Inner, LineSize);
+			Inner.HSplitTop(LineSize, &Button, &Inner);
+			Ui()->DoScrollbarOption(&g_Config.m_ClZzFentBotHorizonTicks,
+				&g_Config.m_ClZzFentBotHorizonTicks, &Button,
+				Localize("Horizon ticks"), 8, 80);
+			Inner.HSplitTop(5.0f, nullptr, &Inner);
+			Inner.HSplitTop(LineSize, &Label, &Inner);
+			Ui()->DoLabel(&Label, Localize("Waypoint keybind"), 14.0f, TEXTALIGN_ML);
+			Inner.HSplitTop(LineSize, &Button, &Inner);
+			static CButtonContainer s_FentBotWpKeyReader;
+			static CButtonContainer s_FentBotWpKeyClear;
+			CBindSlot CurrentBindWp((int)g_Config.m_ClZzFentBotWaypointKey,
+				(int)g_Config.m_ClZzFentBotWaypointMod);
+			const auto ResWp = GameClient()->m_KeyBinder.DoKeyReader(
+				&s_FentBotWpKeyReader, &s_FentBotWpKeyClear, &Button, CurrentBindWp,
+				false);
+			if(!ResWp.m_Aborted &&
+				(ResWp.m_Bind.m_Key != CurrentBindWp.m_Key ||
+					ResWp.m_Bind.m_ModifierMask != CurrentBindWp.m_ModifierMask))
+			{
+				if(CurrentBindWp.m_Key >= KEY_FIRST && CurrentBindWp.m_Key < KEY_LAST)
+					GameClient()->m_Binds.Bind(CurrentBindWp.m_Key, "", false,
+						CurrentBindWp.m_ModifierMask);
+				g_Config.m_ClZzFentBotWaypointKey = ResWp.m_Bind.m_Key;
+				g_Config.m_ClZzFentBotWaypointMod = ResWp.m_Bind.m_ModifierMask;
+				if(ResWp.m_Bind.m_Key >= KEY_FIRST && ResWp.m_Bind.m_Key < KEY_LAST)
+					GameClient()->m_Binds.Bind(ResWp.m_Bind.m_Key, "+zz_fentbot_waypoint",
+						false, ResWp.m_Bind.m_ModifierMask);
+			}
+			Inner.HSplitTop(5.0f, nullptr, &Inner);
+			Inner.HSplitTop(LineSize, &Label, &Inner);
+			Ui()->DoLabel(
+				&Label,
+				Localize(
+					"Бот для gores: планирует движение/прыжки/хук и избегает фриза."),
+				14.0f, TEXTALIGN_ML);
+		}
+	}
 	else if(s_SubTab == 2)
 	{
-        static CScrollRegion s_MiscScrollRegion;
-        static vec2 s_MiscScrollOffset(0.0f, 0.0f);
-        CScrollRegionParams ScrollParams;
-        ScrollParams.m_ScrollUnit = 48.0f;
-        ScrollParams.m_ScrollbarWidth = 16.0f;
-        ScrollParams.m_ScrollbarMargin = 3.0f;
-        ScrollParams.m_Flags = CScrollRegionParams::FLAG_CONTENT_STATIC_WIDTH;
-        s_MiscScrollRegion.Begin(&MainView, &s_MiscScrollOffset, &ScrollParams);
-        MainView.y += s_MiscScrollOffset.y;
-        CUIRect LeftView, RightView;
-        MainView.VSplitMid(&LeftView, &RightView, 20.0f);
-
-        static CScrollRegion s_MiscScrollRegion;
-        static vec2 s_MiscScrollOffset(0.0f, 0.0f);
-        CScrollRegionParams ScrollParams;
-        ScrollParams.m_ScrollUnit = 48.0f;
-        ScrollParams.m_ScrollbarWidth = 16.0f;
-        ScrollParams.m_ScrollbarMargin = 3.0f;
-        ScrollParams.m_Flags = CScrollRegionParams::FLAG_CONTENT_STATIC_WIDTH;
-        s_MiscScrollRegion.Begin(&MainView, &s_MiscScrollOffset, &ScrollParams);
-        MainView.y += s_MiscScrollOffset.y;
-        CUIRect LeftView, RightView;
-        MainView.VSplitMid(&LeftView, &RightView, 20.0f);
-
-        static CScrollRegion s_MiscScrollRegion;
-        static vec2 s_MiscScrollOffset(0.0f, 0.0f);
-        CScrollRegionParams ScrollParams;
-        ScrollParams.m_ScrollUnit = 48.0f;
-        ScrollParams.m_ScrollbarWidth = 16.0f;
-        ScrollParams.m_ScrollbarMargin = 3.0f;
-        ScrollParams.m_Flags = CScrollRegionParams::FLAG_CONTENT_STATIC_WIDTH;
-        s_MiscScrollRegion.Begin(&MainView, &s_MiscScrollOffset, &ScrollParams);
-        MainView.y += s_MiscScrollOffset.y;
-        CUIRect LeftView, RightView;
-        MainView.VSplitMid(&LeftView, &RightView, 20.0f);
-
 		CUIRect LeftView, RightView;
 		MainView.VSplitMid(&LeftView, &RightView, 20.0f);
 
@@ -576,991 +737,7 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
                                 Client()->DummyConnect(IClient::CONN_DUMMY2);
                 }
         }
-        // Zz: Восстановленные блоки
-        const float LineSize = 20.0f;  // <-- ОБЪЯВЛЯЕМ ЗДЕСЬ, ЧТОБЫ НЕ БЫЛО ОШИБКИ
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 220.0f, Localize("Laser Unfreeze"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoUnfreeze, Localize("Auto-unfreeze"),
-                        &g_Config.m_ClZzAutoUnfreeze, &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoUnfreezeAutoLaser, Localize("Auto laser"),
-                        &g_Config.m_ClZzAutoUnfreezeAutoLaser, &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzAutoUnfreezeFov,
-                        &g_Config.m_ClZzAutoUnfreezeFov, &Button, Localize("FOV"), 5, 360);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzAutoUnfreezeAngles,
-                        &g_Config.m_ClZzAutoUnfreezeAngles, &Button, Localize("Angles"), 1, 144);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoUnfreezeSilent, Localize("Silent"),
-                        &g_Config.m_ClZzAutoUnfreezeSilent, &Inner, LineSize);
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(RightView, 305.0f, Localize("Utility"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoAled, Localize("Auto aled enabled?"),
-                        &g_Config.m_ClZzAutoAled, &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoShotgun, Localize("Auto-shotgun"),
-                        &g_Config.m_ClZzAutoShotgun, &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoUnfreezeDebugRecord,
-                        Localize("Auto-unfreeze debug recording"),
-                        &g_Config.m_ClZzAutoUnfreezeDebugRecord, &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzFreezeFullDebugRecord,
-                        Localize("Full freeze session recording"),
-                        &g_Config.m_ClZzFreezeFullDebugRecord, &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzForceZoom, Localize("Force zoom"),
-                        &g_Config.m_ClZzForceZoom, &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzFakePing,
-                        &g_Config.m_ClZzFakePing, &Button,
-                        Localize("Fake ping (ms, 0=off)"), 0, 999);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzSensBoost,
-                        Localize("Sensitivity x5 boost"), &g_Config.m_ClZzSensBoost,
-                        &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzSensBoost5000,
-                        Localize("Sensitivity x5000 boost"), &g_Config.m_ClZzSensBoost5000,
-                        &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzSpinAim,
-                        Localize("Fake Aim"), &g_Config.m_ClZzSpinAim,
-                        &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzSpinAimSpeed,
-                        &g_Config.m_ClZzSpinAimSpeed, &Button,
-                        Localize("Speed"), 0, 75);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzSpinAimShowMe,
-                        Localize("Show me"), &g_Config.m_ClZzSpinAimShowMe,
-                        &Inner, LineSize);
-                Inner.HSplitTop(8.0f, nullptr, &Inner);
-                Inner.HSplitTop(LineSize, &Label, &Inner);
-                Ui()->DoLabel(&Label, Localize("Companion"), 15.0f, TEXTALIGN_ML);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzCompanionEnabled, Localize("Companion enabled"),
-                        &g_Config.m_ClZzCompanionEnabled, &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzCompanionFollowTiles,
-                        &g_Config.m_ClZzCompanionFollowTiles, &Button,
-                        Localize("Follow distance (tiles)"), 0, 30);
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 40.0f, Localize("Smart Double Jump"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_TcSmartDoubleJump, Localize("Auto-jump near freeze"), &g_Config.m_TcSmartDoubleJump, &Inner, LineSize);
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 220.0f, Localize("Auto Message"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_TcAutoMessage, Localize("Enable auto message"), &g_Config.m_TcAutoMessage, &Inner, LineSize);
-                char aMsgSuffix[32];
-                str_format(aMsgSuffix, sizeof(aMsgSuffix), " %s", Localize("sec"));
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_TcAutoMessageInterval, &g_Config.m_TcAutoMessageInterval, &Button, Localize("Interval"), 10, 3600, &CUi::ms_LogarithmicScrollbarScale, 0, aMsgSuffix);
-                Inner.HSplitTop(LineSize, &Label, &Inner);
-                Ui()->DoLabel(&Label, Localize("Message"), 14.0f, TEXTALIGN_ML);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                static CLineInput s_AutoMessageInput(g_Config.m_TcAutoMessageText, sizeof(g_Config.m_TcAutoMessageText));
-                Ui()->DoEditBox(&s_AutoMessageInput, &Button, 14.0f);
-                Inner.HSplitTop(8.0f, nullptr, &Inner);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                static CButtonContainer s_SendNowButton;
-                if(DoButton_Menu(&s_SendNowButton, Localize("Send now"), 0, &Button))
-                        GameClient()->m_TClient.SendAutoMessageNow();
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 180.0f, Localize("Spam Emote"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_TcSpamEmote, Localize("Spam Emote"), &g_Config.m_TcSpamEmote, &Inner, LineSize);
-                {
-                        static std::vector<const char *> s_vModeNames;
-                        s_vModeNames = {Localize("All emotes in order"), Localize("Random emotes"), Localize("Single emote")};
-                        static CUi::SDropDownState s_ModeDropDownState;
-                        static CScrollRegion s_ModeDropDownScrollRegion;
-                        s_ModeDropDownState.m_SelectionPopupContext.m_pScrollRegion = &s_ModeDropDownScrollRegion;
-                        CUIRect DropDownRect;
-                        Inner.HSplitTop(LineSize, &DropDownRect, &Inner);
-                        DropDownRect.VSplitLeft(120.0f, &Label, &DropDownRect);
-                        Ui()->DoLabel(&Label, Localize("Mode"), 14.0f, TEXTALIGN_ML);
-                        g_Config.m_TcSpamEmoteMode = Ui()->DoDropDown(&DropDownRect, g_Config.m_TcSpamEmoteMode, s_vModeNames.data(), s_vModeNames.size(), s_ModeDropDownState);
-                }
-                if(g_Config.m_TcSpamEmoteMode == 2)
-                {
-                        Inner.HSplitTop(LineSize, &Button, &Inner);
-                        Ui()->DoScrollbarOption(&g_Config.m_TcSpamEmoteId, &g_Config.m_TcSpamEmoteId, &Button, Localize("Emote"), 1, 16);
-                }
-                char aSpamSuffix[32];
-                str_format(aSpamSuffix, sizeof(aSpamSuffix), " %s", Localize("ms"));
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_TcSpamEmoteInterval, &g_Config.m_TcSpamEmoteInterval, &Button, Localize("Delay"), 50, 5000, &CUi::ms_LogarithmicScrollbarScale, 0, aSpamSuffix);
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(RightView, 95.0f, Localize("Click GUI"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzClickGui, Localize("Show ClickGUI"),
-                        &g_Config.m_ClZzClickGui, &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Label, &Inner);
-                Ui()->DoLabel(&Label, Localize("Open / close direct key"), 14.0f,
-                        TEXTALIGN_ML);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                static CButtonContainer s_ClickGuiKeyReader;
-                static CButtonContainer s_ClickGuiKeyClear;
-                const CBindSlot CurrentClickGuiBind(g_Config.m_ClZzClickGuiKey,
-                        g_Config.m_ClZzClickGuiMod);
-                const auto Result = GameClient()->m_KeyBinder.DoKeyReader(
-                        &s_ClickGuiKeyReader, &s_ClickGuiKeyClear, &Button,
-                        CurrentClickGuiBind, false);
-                if(!Result.m_Aborted && Result.m_Bind != CurrentClickGuiBind)
-                {
-                        g_Config.m_ClZzClickGuiKey = Result.m_Bind.m_Key;
-                        g_Config.m_ClZzClickGuiMod = Result.m_Bind.m_ModifierMask;
-                }
-        }
-
-        // Zz: Spoofer (Aether style)
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 220.0f, Localize("Spoofer"), Inner);
-
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ZzSpoofClientStr, Localize("Enable Spoofer"),
-                        &g_Config.m_ZzSpoofClientStr, &Inner, LineSize);
-
-                {
-                        CUIRect RowLabel, RowDropDown;
-                        Inner.HSplitTop(LineSize, &RowLabel, &Inner);
-                        Ui()->DoLabel(&RowLabel, Localize("Client preset"), 14.0f, TEXTALIGN_ML);
-                        std::array<const char *, 4> aZzPresetNames = {"DDNet", "TClient", "BestClient", "Custom"};
-                        static CUi::SDropDownState s_ZzSpoofPresetDropDownState;
-                        static CScrollRegion s_ZzSpoofPresetDropDownScrollRegion;
-                        s_ZzSpoofPresetDropDownState.m_SelectionPopupContext.m_pScrollRegion = &s_ZzSpoofPresetDropDownScrollRegion;
-                        const int OldVal = std::clamp(g_Config.m_ZzSpoofClientPreset, 0, 3);
-                        Inner.HSplitTop(LineSize, &RowDropDown, &Inner);
-                        const int NewVal = Ui()->DoDropDown(&RowDropDown, OldVal, aZzPresetNames.data(), aZzPresetNames.size(), s_ZzSpoofPresetDropDownState);
-                        if(NewVal != OldVal) {
-                                g_Config.m_ZzSpoofClientPreset = NewVal;
-                                if(NewVal == 0) {
-                                        str_copy(g_Config.m_ZzSpoofClientName, "DDNet", sizeof(g_Config.m_ZzSpoofClientName));
-                                        str_copy(g_Config.m_ZzSpoofClientVersion, "19.8.2", sizeof(g_Config.m_ZzSpoofClientVersion));
-                                        g_Config.m_ZzSpoofVersionId = 19082;
-                                } else if(NewVal == 1) {
-                                        str_copy(g_Config.m_ZzSpoofClientName, "TClient", sizeof(g_Config.m_ZzSpoofClientName));
-                                        str_copy(g_Config.m_ZzSpoofClientVersion, "10.9.0", sizeof(g_Config.m_ZzSpoofClientVersion));
-                                        g_Config.m_ZzSpoofVersionId = 20010;
-                                        str_copy(g_Config.m_ZzSpoofGitHash, "2e2aedc2e7b463a10b324a0f69d3fdb57", sizeof(g_Config.m_ZzSpoofGitHash));
-                                        g_Config.m_ZzSpoofGitHashEnabled = 1;
-                                } else if(NewVal == 2) {
-                                        str_copy(g_Config.m_ZzSpoofClientName, "BestClient", sizeof(g_Config.m_ZzSpoofClientName));
-                                        str_copy(g_Config.m_ZzSpoofClientVersion, "2.1.1 stable-beta", sizeof(g_Config.m_ZzSpoofClientVersion));
-                                        g_Config.m_ZzSpoofVersionId = 19080;
-                                        str_copy(g_Config.m_ZzSpoofGitHash, "0df5194057d68a7708b282c5c8245308", sizeof(g_Config.m_ZzSpoofGitHash));
-                                        g_Config.m_ZzSpoofGitHashEnabled = 1;
-                                }
-                        }
-                }
-
-                CUIRect ZzButton;
-                Inner.HSplitTop(LineSize, &ZzButton, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ZzSpoofVersionId,
-                        &g_Config.m_ZzSpoofVersionId, &ZzButton, Localize("Version ID"), 10000, 21000);
-
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ZzSpoofGitHashEnabled, Localize("Spoof Git hash"),
-                        &g_Config.m_ZzSpoofGitHashEnabled, &Inner, LineSize);
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 200.0f, Localize("Dummy Manager"), Inner);
-                CUIRect Row;
-                Inner.HSplitTop(LineSize, &Row, &Inner);
-                CUIRect B0, B1, B2;
-                Row.VSplitLeft(Row.w / 3.0f, &B0, &Row);
-                Row.VSplitLeft(Row.w / 2.0f, &B1, &B2);
-                B0.HMargin(1.0f, &B0);
-                B1.HMargin(1.0f, &B1);
-                B2.HMargin(1.0f, &B2);
-                static CButtonContainer s_DummyMainBtn, s_Dummy1Btn, s_Dummy2Btn;
-                const bool IsMain = (g_Config.m_ClDummy == IClient::CONN_MAIN);
-                const bool IsDummy1 = (g_Config.m_ClDummy == IClient::CONN_DUMMY);
-                const bool IsDummy2 = (g_Config.m_ClDummy == IClient::CONN_DUMMY2);
-                if(DoButton_MenuTab(&s_DummyMainBtn, Localize("Main"), IsMain, &B0, IGraphics::CORNER_ALL, nullptr, nullptr, nullptr, nullptr, 12.0f))
-                        g_Config.m_ClDummy = IClient::CONN_MAIN;
-                const bool Dummy1Avail = Client()->DummyConnected(IClient::CONN_DUMMY);
-                if(DoButton_MenuTab(&s_Dummy1Btn, Dummy1Avail ? Localize("Dummy 1") : Localize("Dummy 1 (off)"), IsDummy1, &B1, IGraphics::CORNER_ALL, nullptr, nullptr, nullptr, nullptr, 12.0f) && Dummy1Avail)
-                        g_Config.m_ClDummy = IClient::CONN_DUMMY;
-                const bool Dummy2Avail = Client()->DummyConnected(IClient::CONN_DUMMY2);
-                if(DoButton_MenuTab(&s_Dummy2Btn, Dummy2Avail ? Localize("Dummy 2") : Localize("Dummy 2 (off)"), IsDummy2, &B2, IGraphics::CORNER_ALL, nullptr, nullptr, nullptr, nullptr, 12.0f) && Dummy2Avail)
-                        g_Config.m_ClDummy = IClient::CONN_DUMMY2;
-                Inner.HSplitTop(LineSize, &Row, &Inner);
-                static CButtonContainer s_Dummy2ConnectBtn;
-                if(Dummy2Avail) {
-                        if(DoButton_Menu(&s_Dummy2ConnectBtn, Localize("Disconnect Dummy 2"), 0, &Row)) {
-                                Client()->DummyDisconnect(nullptr, IClient::CONN_DUMMY2);
-                                if(g_Config.m_ClDummy == IClient::CONN_DUMMY2) g_Config.m_ClDummy = IClient::CONN_MAIN;
-                        }
-                } else if(Client()->DummyConnecting(IClient::CONN_DUMMY2)) {
-                        DoButton_Menu(&s_Dummy2ConnectBtn, Localize("Connecting Dummy 2..."), 1, &Row);
-                } else {
-                        const bool Dummy1Ok = Client()->DummyConnected(IClient::CONN_DUMMY) || Client()->DummyConnecting(IClient::CONN_DUMMY);
-                        if(DoButton_Menu(&s_Dummy2ConnectBtn, Localize("Connect Dummy 2"), Dummy1Ok ? 0 : 1, &Row) && Dummy1Ok)
-                                Client()->DummyConnect(IClient::CONN_DUMMY2);
-                }
-        }
-        // Zz: Восстановленные блоки
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 220.0f, Localize("Laser Unfreeze"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoUnfreeze, Localize("Auto-unfreeze"),
-                        &g_Config.m_ClZzAutoUnfreeze, &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoUnfreezeAutoLaser, Localize("Auto laser"),
-                        &g_Config.m_ClZzAutoUnfreezeAutoLaser, &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzAutoUnfreezeFov,
-                        &g_Config.m_ClZzAutoUnfreezeFov, &Button, Localize("FOV"), 5, 360);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzAutoUnfreezeAngles,
-                        &g_Config.m_ClZzAutoUnfreezeAngles, &Button, Localize("Angles"), 1, 144);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoUnfreezeSilent, Localize("Silent"),
-                        &g_Config.m_ClZzAutoUnfreezeSilent, &Inner, LineSize);
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(RightView, 305.0f, Localize("Utility"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoAled, Localize("Auto aled enabled?"),
-                        &g_Config.m_ClZzAutoAled, &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoShotgun, Localize("Auto-shotgun"),
-                        &g_Config.m_ClZzAutoShotgun, &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoUnfreezeDebugRecord,
-                        Localize("Auto-unfreeze debug recording"),
-                        &g_Config.m_ClZzAutoUnfreezeDebugRecord, &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzFreezeFullDebugRecord,
-                        Localize("Full freeze session recording"),
-                        &g_Config.m_ClZzFreezeFullDebugRecord, &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzForceZoom, Localize("Force zoom"),
-                        &g_Config.m_ClZzForceZoom, &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzFakePing,
-                        &g_Config.m_ClZzFakePing, &Button,
-                        Localize("Fake ping (ms, 0=off)"), 0, 999);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzSensBoost,
-                        Localize("Sensitivity x5 boost"), &g_Config.m_ClZzSensBoost,
-                        &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzSensBoost5000,
-                        Localize("Sensitivity x5000 boost"), &g_Config.m_ClZzSensBoost5000,
-                        &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzSpinAim,
-                        Localize("Fake Aim"), &g_Config.m_ClZzSpinAim,
-                        &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzSpinAimSpeed,
-                        &g_Config.m_ClZzSpinAimSpeed, &Button,
-                        Localize("Speed"), 0, 75);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzSpinAimShowMe,
-                        Localize("Show me"), &g_Config.m_ClZzSpinAimShowMe,
-                        &Inner, LineSize);
-                Inner.HSplitTop(8.0f, nullptr, &Inner);
-                Inner.HSplitTop(LineSize, &Label, &Inner);
-                Ui()->DoLabel(&Label, Localize("Companion"), 15.0f, TEXTALIGN_ML);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzCompanionEnabled, Localize("Companion enabled"),
-                        &g_Config.m_ClZzCompanionEnabled, &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzCompanionFollowTiles,
-                        &g_Config.m_ClZzCompanionFollowTiles, &Button,
-                        Localize("Follow distance (tiles)"), 0, 30);
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 40.0f, Localize("Smart Double Jump"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_TcSmartDoubleJump, Localize("Auto-jump near freeze"), &g_Config.m_TcSmartDoubleJump, &Inner, LineSize);
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 220.0f, Localize("Auto Message"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_TcAutoMessage, Localize("Enable auto message"), &g_Config.m_TcAutoMessage, &Inner, LineSize);
-                char aMsgSuffix[32];
-                str_format(aMsgSuffix, sizeof(aMsgSuffix), " %s", Localize("sec"));
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_TcAutoMessageInterval, &g_Config.m_TcAutoMessageInterval, &Button, Localize("Interval"), 10, 3600, &CUi::ms_LogarithmicScrollbarScale, 0, aMsgSuffix);
-                Inner.HSplitTop(LineSize, &Label, &Inner);
-                Ui()->DoLabel(&Label, Localize("Message"), 14.0f, TEXTALIGN_ML);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                static CLineInput s_AutoMessageInput(g_Config.m_TcAutoMessageText, sizeof(g_Config.m_TcAutoMessageText));
-                Ui()->DoEditBox(&s_AutoMessageInput, &Button, 14.0f);
-                Inner.HSplitTop(8.0f, nullptr, &Inner);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                static CButtonContainer s_SendNowButton;
-                if(DoButton_Menu(&s_SendNowButton, Localize("Send now"), 0, &Button))
-                        GameClient()->m_TClient.SendAutoMessageNow();
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 180.0f, Localize("Spam Emote"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_TcSpamEmote, Localize("Spam Emote"), &g_Config.m_TcSpamEmote, &Inner, LineSize);
-                {
-                        static std::vector<const char *> s_vModeNames;
-                        s_vModeNames = {Localize("All emotes in order"), Localize("Random emotes"), Localize("Single emote")};
-                        static CUi::SDropDownState s_ModeDropDownState;
-                        static CScrollRegion s_ModeDropDownScrollRegion;
-                        s_ModeDropDownState.m_SelectionPopupContext.m_pScrollRegion = &s_ModeDropDownScrollRegion;
-                        CUIRect DropDownRect;
-                        Inner.HSplitTop(LineSize, &DropDownRect, &Inner);
-                        DropDownRect.VSplitLeft(120.0f, &Label, &DropDownRect);
-                        Ui()->DoLabel(&Label, Localize("Mode"), 14.0f, TEXTALIGN_ML);
-                        g_Config.m_TcSpamEmoteMode = Ui()->DoDropDown(&DropDownRect, g_Config.m_TcSpamEmoteMode, s_vModeNames.data(), s_vModeNames.size(), s_ModeDropDownState);
-                }
-                if(g_Config.m_TcSpamEmoteMode == 2)
-                {
-                        Inner.HSplitTop(LineSize, &Button, &Inner);
-                        Ui()->DoScrollbarOption(&g_Config.m_TcSpamEmoteId, &g_Config.m_TcSpamEmoteId, &Button, Localize("Emote"), 1, 16);
-                }
-                char aSpamSuffix[32];
-                str_format(aSpamSuffix, sizeof(aSpamSuffix), " %s", Localize("ms"));
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_TcSpamEmoteInterval, &g_Config.m_TcSpamEmoteInterval, &Button, Localize("Delay"), 50, 5000, &CUi::ms_LogarithmicScrollbarScale, 0, aSpamSuffix);
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(RightView, 95.0f, Localize("Click GUI"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzClickGui, Localize("Show ClickGUI"),
-                        &g_Config.m_ClZzClickGui, &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Label, &Inner);
-                Ui()->DoLabel(&Label, Localize("Open / close direct key"), 14.0f,
-                        TEXTALIGN_ML);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                static CButtonContainer s_ClickGuiKeyReader;
-                static CButtonContainer s_ClickGuiKeyClear;
-                const CBindSlot CurrentClickGuiBind(g_Config.m_ClZzClickGuiKey,
-                        g_Config.m_ClZzClickGuiMod);
-                const auto Result = GameClient()->m_KeyBinder.DoKeyReader(
-                        &s_ClickGuiKeyReader, &s_ClickGuiKeyClear, &Button,
-                        CurrentClickGuiBind, false);
-                if(!Result.m_Aborted && Result.m_Bind != CurrentClickGuiBind)
-                {
-                        g_Config.m_ClZzClickGuiKey = Result.m_Bind.m_Key;
-                        g_Config.m_ClZzClickGuiMod = Result.m_Bind.m_ModifierMask;
-                }
-        }
-
-        // Zz: Spoofer (Aether style)
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 220.0f, Localize("Spoofer"), Inner);
-
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ZzSpoofClientStr, Localize("Enable Spoofer"),
-                        &g_Config.m_ZzSpoofClientStr, &Inner, LineSize);
-
-                {
-                        CUIRect RowLabel, RowDropDown;
-                        Inner.HSplitTop(LineSize, &RowLabel, &Inner);
-                        Ui()->DoLabel(&RowLabel, Localize("Client preset"), 14.0f, TEXTALIGN_ML);
-                        std::array<const char *, 4> aZzPresetNames = {"DDNet", "TClient", "BestClient", "Custom"};
-                        static CUi::SDropDownState s_ZzSpoofPresetDropDownState;
-                        static CScrollRegion s_ZzSpoofPresetDropDownScrollRegion;
-                        s_ZzSpoofPresetDropDownState.m_SelectionPopupContext.m_pScrollRegion = &s_ZzSpoofPresetDropDownScrollRegion;
-                        const int OldVal = std::clamp(g_Config.m_ZzSpoofClientPreset, 0, 3);
-                        Inner.HSplitTop(LineSize, &RowDropDown, &Inner);
-                        const int NewVal = Ui()->DoDropDown(&RowDropDown, OldVal, aZzPresetNames.data(), aZzPresetNames.size(), s_ZzSpoofPresetDropDownState);
-                        if(NewVal != OldVal) {
-                                g_Config.m_ZzSpoofClientPreset = NewVal;
-                                if(NewVal == 0) {
-                                        str_copy(g_Config.m_ZzSpoofClientName, "DDNet", sizeof(g_Config.m_ZzSpoofClientName));
-                                        str_copy(g_Config.m_ZzSpoofClientVersion, "19.8.2", sizeof(g_Config.m_ZzSpoofClientVersion));
-                                        g_Config.m_ZzSpoofVersionId = 19082;
-                                } else if(NewVal == 1) {
-                                        str_copy(g_Config.m_ZzSpoofClientName, "TClient", sizeof(g_Config.m_ZzSpoofClientName));
-                                        str_copy(g_Config.m_ZzSpoofClientVersion, "10.9.0", sizeof(g_Config.m_ZzSpoofClientVersion));
-                                        g_Config.m_ZzSpoofVersionId = 20010;
-                                        str_copy(g_Config.m_ZzSpoofGitHash, "2e2aedc2e7b463a10b324a0f69d3fdb57", sizeof(g_Config.m_ZzSpoofGitHash));
-                                        g_Config.m_ZzSpoofGitHashEnabled = 1;
-                                } else if(NewVal == 2) {
-                                        str_copy(g_Config.m_ZzSpoofClientName, "BestClient", sizeof(g_Config.m_ZzSpoofClientName));
-                                        str_copy(g_Config.m_ZzSpoofClientVersion, "2.1.1 stable-beta", sizeof(g_Config.m_ZzSpoofClientVersion));
-                                        g_Config.m_ZzSpoofVersionId = 19080;
-                                        str_copy(g_Config.m_ZzSpoofGitHash, "0df5194057d68a7708b282c5c8245308", sizeof(g_Config.m_ZzSpoofGitHash));
-                                        g_Config.m_ZzSpoofGitHashEnabled = 1;
-                                }
-                        }
-                }
-
-                CUIRect ZzButton;
-                Inner.HSplitTop(LineSize, &ZzButton, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ZzSpoofVersionId,
-                        &g_Config.m_ZzSpoofVersionId, &ZzButton, Localize("Version ID"), 10000, 21000);
-
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ZzSpoofGitHashEnabled, Localize("Spoof Git hash"),
-                        &g_Config.m_ZzSpoofGitHashEnabled, &Inner, LineSize);
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 200.0f, Localize("Dummy Manager"), Inner);
-                CUIRect Row;
-                Inner.HSplitTop(LineSize, &Row, &Inner);
-                CUIRect B0, B1, B2;
-                Row.VSplitLeft(Row.w / 3.0f, &B0, &Row);
-                Row.VSplitLeft(Row.w / 2.0f, &B1, &B2);
-                B0.HMargin(1.0f, &B0);
-                B1.HMargin(1.0f, &B1);
-                B2.HMargin(1.0f, &B2);
-                static CButtonContainer s_DummyMainBtn, s_Dummy1Btn, s_Dummy2Btn;
-                const bool IsMain = (g_Config.m_ClDummy == IClient::CONN_MAIN);
-                const bool IsDummy1 = (g_Config.m_ClDummy == IClient::CONN_DUMMY);
-                const bool IsDummy2 = (g_Config.m_ClDummy == IClient::CONN_DUMMY2);
-                if(DoButton_MenuTab(&s_DummyMainBtn, Localize("Main"), IsMain, &B0, IGraphics::CORNER_ALL, nullptr, nullptr, nullptr, nullptr, 12.0f))
-                        g_Config.m_ClDummy = IClient::CONN_MAIN;
-                const bool Dummy1Avail = Client()->DummyConnected(IClient::CONN_DUMMY);
-                if(DoButton_MenuTab(&s_Dummy1Btn, Dummy1Avail ? Localize("Dummy 1") : Localize("Dummy 1 (off)"), IsDummy1, &B1, IGraphics::CORNER_ALL, nullptr, nullptr, nullptr, nullptr, 12.0f) && Dummy1Avail)
-                        g_Config.m_ClDummy = IClient::CONN_DUMMY;
-                const bool Dummy2Avail = Client()->DummyConnected(IClient::CONN_DUMMY2);
-                if(DoButton_MenuTab(&s_Dummy2Btn, Dummy2Avail ? Localize("Dummy 2") : Localize("Dummy 2 (off)"), IsDummy2, &B2, IGraphics::CORNER_ALL, nullptr, nullptr, nullptr, nullptr, 12.0f) && Dummy2Avail)
-                        g_Config.m_ClDummy = IClient::CONN_DUMMY2;
-                Inner.HSplitTop(LineSize, &Row, &Inner);
-                static CButtonContainer s_Dummy2ConnectBtn;
-                if(Dummy2Avail) {
-                        if(DoButton_Menu(&s_Dummy2ConnectBtn, Localize("Disconnect Dummy 2"), 0, &Row)) {
-                                Client()->DummyDisconnect(nullptr, IClient::CONN_DUMMY2);
-                                if(g_Config.m_ClDummy == IClient::CONN_DUMMY2) g_Config.m_ClDummy = IClient::CONN_MAIN;
-                        }
-                } else if(Client()->DummyConnecting(IClient::CONN_DUMMY2)) {
-                        DoButton_Menu(&s_Dummy2ConnectBtn, Localize("Connecting Dummy 2..."), 1, &Row);
-                } else {
-                        const bool Dummy1Ok = Client()->DummyConnected(IClient::CONN_DUMMY) || Client()->DummyConnecting(IClient::CONN_DUMMY);
-                        if(DoButton_Menu(&s_Dummy2ConnectBtn, Localize("Connect Dummy 2"), Dummy1Ok ? 0 : 1, &Row) && Dummy1Ok)
-                                Client()->DummyConnect(IClient::CONN_DUMMY2);
-                }
-        }
-	
-        CUIRect ContentEnd = MainView;
-        ContentEnd.y = maximum(LeftView.y, RightView.y);
-        ContentEnd.h = 0.0f;
-        s_MiscScrollRegion.AddRect(ContentEnd);
-        s_MiscScrollRegion.End();
-
-        CUIRect ContentEnd = MainView;
-        ContentEnd.y = maximum(LeftView.y, RightView.y);
-        ContentEnd.h = 0.0f;
-        s_MiscScrollRegion.AddRect(ContentEnd);
-        s_MiscScrollRegion.End();
-
-        CUIRect ContentEnd = MainView;
-        ContentEnd.y = maximum(LeftView.y, RightView.y);
-        ContentEnd.h = 0.0f;
-        s_MiscScrollRegion.AddRect(ContentEnd);
-        s_MiscScrollRegion.End();
-
-        // Zz: Восстановленные блоки
-        const float LineSize = 20.0f;
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 220.0f, Localize("Laser Unfreeze"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoUnfreeze, Localize("Auto-unfreeze"),
-                        &g_Config.m_ClZzAutoUnfreeze, &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoUnfreezeAutoLaser, Localize("Auto laser"),
-                        &g_Config.m_ClZzAutoUnfreezeAutoLaser, &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzAutoUnfreezeFov,
-                        &g_Config.m_ClZzAutoUnfreezeFov, &Button, Localize("FOV"), 5, 360);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzAutoUnfreezeAngles,
-                        &g_Config.m_ClZzAutoUnfreezeAngles, &Button, Localize("Angles"), 1, 144);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoUnfreezeSilent, Localize("Silent"),
-                        &g_Config.m_ClZzAutoUnfreezeSilent, &Inner, LineSize);
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(RightView, 305.0f, Localize("Utility"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoAled, Localize("Auto aled enabled?"),
-                        &g_Config.m_ClZzAutoAled, &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoShotgun, Localize("Auto-shotgun"),
-                        &g_Config.m_ClZzAutoShotgun, &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoUnfreezeDebugRecord,
-                        Localize("Auto-unfreeze debug recording"),
-                        &g_Config.m_ClZzAutoUnfreezeDebugRecord, &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzFreezeFullDebugRecord,
-                        Localize("Full freeze session recording"),
-                        &g_Config.m_ClZzFreezeFullDebugRecord, &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzForceZoom, Localize("Force zoom"),
-                        &g_Config.m_ClZzForceZoom, &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzFakePing,
-                        &g_Config.m_ClZzFakePing, &Button,
-                        Localize("Fake ping (ms, 0=off)"), 0, 999);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzSensBoost,
-                        Localize("Sensitivity x5 boost"), &g_Config.m_ClZzSensBoost,
-                        &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzSensBoost5000,
-                        Localize("Sensitivity x5000 boost"), &g_Config.m_ClZzSensBoost5000,
-                        &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzSpinAim,
-                        Localize("Fake Aim"), &g_Config.m_ClZzSpinAim,
-                        &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzSpinAimSpeed,
-                        &g_Config.m_ClZzSpinAimSpeed, &Button,
-                        Localize("Speed"), 0, 75);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzSpinAimShowMe,
-                        Localize("Show me"), &g_Config.m_ClZzSpinAimShowMe,
-                        &Inner, LineSize);
-                Inner.HSplitTop(8.0f, nullptr, &Inner);
-                Inner.HSplitTop(LineSize, &Label, &Inner);
-                Ui()->DoLabel(&Label, Localize("Companion"), 15.0f, TEXTALIGN_ML);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzCompanionEnabled, Localize("Companion enabled"),
-                        &g_Config.m_ClZzCompanionEnabled, &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzCompanionFollowTiles,
-                        &g_Config.m_ClZzCompanionFollowTiles, &Button,
-                        Localize("Follow distance (tiles)"), 0, 30);
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 40.0f, Localize("Smart Double Jump"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_TcSmartDoubleJump, Localize("Auto-jump near freeze"), &g_Config.m_TcSmartDoubleJump, &Inner, LineSize);
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 220.0f, Localize("Auto Message"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_TcAutoMessage, Localize("Enable auto message"), &g_Config.m_TcAutoMessage, &Inner, LineSize);
-                char aMsgSuffix[32];
-                str_format(aMsgSuffix, sizeof(aMsgSuffix), " %s", Localize("sec"));
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_TcAutoMessageInterval, &g_Config.m_TcAutoMessageInterval, &Button, Localize("Interval"), 10, 3600, &CUi::ms_LogarithmicScrollbarScale, 0, aMsgSuffix);
-                Inner.HSplitTop(LineSize, &Label, &Inner);
-                Ui()->DoLabel(&Label, Localize("Message"), 14.0f, TEXTALIGN_ML);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                static CLineInput s_AutoMessageInput(g_Config.m_TcAutoMessageText, sizeof(g_Config.m_TcAutoMessageText));
-                Ui()->DoEditBox(&s_AutoMessageInput, &Button, 14.0f);
-                Inner.HSplitTop(8.0f, nullptr, &Inner);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                static CButtonContainer s_SendNowButton;
-                if(DoButton_Menu(&s_SendNowButton, Localize("Send now"), 0, &Button))
-                        GameClient()->m_TClient.SendAutoMessageNow();
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 180.0f, Localize("Spam Emote"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_TcSpamEmote, Localize("Spam Emote"), &g_Config.m_TcSpamEmote, &Inner, LineSize);
-                {
-                        static std::vector<const char *> s_vModeNames;
-                        s_vModeNames = {Localize("All emotes in order"), Localize("Random emotes"), Localize("Single emote")};
-                        static CUi::SDropDownState s_ModeDropDownState;
-                        static CScrollRegion s_ModeDropDownScrollRegion;
-                        s_ModeDropDownState.m_SelectionPopupContext.m_pScrollRegion = &s_ModeDropDownScrollRegion;
-                        CUIRect DropDownRect;
-                        Inner.HSplitTop(LineSize, &DropDownRect, &Inner);
-                        DropDownRect.VSplitLeft(120.0f, &Label, &DropDownRect);
-                        Ui()->DoLabel(&Label, Localize("Mode"), 14.0f, TEXTALIGN_ML);
-                        g_Config.m_TcSpamEmoteMode = Ui()->DoDropDown(&DropDownRect, g_Config.m_TcSpamEmoteMode, s_vModeNames.data(), s_vModeNames.size(), s_ModeDropDownState);
-                }
-                if(g_Config.m_TcSpamEmoteMode == 2)
-                {
-                        Inner.HSplitTop(LineSize, &Button, &Inner);
-                        Ui()->DoScrollbarOption(&g_Config.m_TcSpamEmoteId, &g_Config.m_TcSpamEmoteId, &Button, Localize("Emote"), 1, 16);
-                }
-                char aSpamSuffix[32];
-                str_format(aSpamSuffix, sizeof(aSpamSuffix), " %s", Localize("ms"));
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_TcSpamEmoteInterval, &g_Config.m_TcSpamEmoteInterval, &Button, Localize("Delay"), 50, 5000, &CUi::ms_LogarithmicScrollbarScale, 0, aSpamSuffix);
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(RightView, 95.0f, Localize("Click GUI"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzClickGui, Localize("Show ClickGUI"),
-                        &g_Config.m_ClZzClickGui, &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Label, &Inner);
-                Ui()->DoLabel(&Label, Localize("Open / close direct key"), 14.0f,
-                        TEXTALIGN_ML);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                static CButtonContainer s_ClickGuiKeyReader;
-                static CButtonContainer s_ClickGuiKeyClear;
-                const CBindSlot CurrentClickGuiBind(g_Config.m_ClZzClickGuiKey,
-                        g_Config.m_ClZzClickGuiMod);
-                const auto Result = GameClient()->m_KeyBinder.DoKeyReader(
-                        &s_ClickGuiKeyReader, &s_ClickGuiKeyClear, &Button,
-                        CurrentClickGuiBind, false);
-                if(!Result.m_Aborted && Result.m_Bind != CurrentClickGuiBind)
-                {
-                        g_Config.m_ClZzClickGuiKey = Result.m_Bind.m_Key;
-                        g_Config.m_ClZzClickGuiMod = Result.m_Bind.m_ModifierMask;
-                }
-        }
-
-        // Zz: Spoofer (Aether style)
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 220.0f, Localize("Spoofer"), Inner);
-
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ZzSpoofClientStr, Localize("Enable Spoofer"),
-                        &g_Config.m_ZzSpoofClientStr, &Inner, LineSize);
-
-                {
-                        CUIRect RowLabel, RowDropDown;
-                        Inner.HSplitTop(LineSize, &RowLabel, &Inner);
-                        Ui()->DoLabel(&RowLabel, Localize("Client preset"), 14.0f, TEXTALIGN_ML);
-                        std::array<const char *, 4> aZzPresetNames = {"DDNet", "TClient", "BestClient", "Custom"};
-                        static CUi::SDropDownState s_ZzSpoofPresetDropDownState;
-                        static CScrollRegion s_ZzSpoofPresetDropDownScrollRegion;
-                        s_ZzSpoofPresetDropDownState.m_SelectionPopupContext.m_pScrollRegion = &s_ZzSpoofPresetDropDownScrollRegion;
-                        const int OldVal = std::clamp(g_Config.m_ZzSpoofClientPreset, 0, 3);
-                        Inner.HSplitTop(LineSize, &RowDropDown, &Inner);
-                        const int NewVal = Ui()->DoDropDown(&RowDropDown, OldVal, aZzPresetNames.data(), aZzPresetNames.size(), s_ZzSpoofPresetDropDownState);
-                        if(NewVal != OldVal) {
-                                g_Config.m_ZzSpoofClientPreset = NewVal;
-                                if(NewVal == 0) {
-                                        str_copy(g_Config.m_ZzSpoofClientName, "DDNet", sizeof(g_Config.m_ZzSpoofClientName));
-                                        str_copy(g_Config.m_ZzSpoofClientVersion, "19.8.2", sizeof(g_Config.m_ZzSpoofClientVersion));
-                                        g_Config.m_ZzSpoofVersionId = 19082;
-                                } else if(NewVal == 1) {
-                                        str_copy(g_Config.m_ZzSpoofClientName, "TClient", sizeof(g_Config.m_ZzSpoofClientName));
-                                        str_copy(g_Config.m_ZzSpoofClientVersion, "10.9.0", sizeof(g_Config.m_ZzSpoofClientVersion));
-                                        g_Config.m_ZzSpoofVersionId = 20010;
-                                        str_copy(g_Config.m_ZzSpoofGitHash, "2e2aedc2e7b463a10b324a0f69d3fdb57", sizeof(g_Config.m_ZzSpoofGitHash));
-                                        g_Config.m_ZzSpoofGitHashEnabled = 1;
-                                } else if(NewVal == 2) {
-                                        str_copy(g_Config.m_ZzSpoofClientName, "BestClient", sizeof(g_Config.m_ZzSpoofClientName));
-                                        str_copy(g_Config.m_ZzSpoofClientVersion, "2.1.1 stable-beta", sizeof(g_Config.m_ZzSpoofClientVersion));
-                                        g_Config.m_ZzSpoofVersionId = 19080;
-                                        str_copy(g_Config.m_ZzSpoofGitHash, "0df5194057d68a7708b282c5c8245308", sizeof(g_Config.m_ZzSpoofGitHash));
-                                        g_Config.m_ZzSpoofGitHashEnabled = 1;
-                                }
-                        }
-                }
-
-                CUIRect ZzButton;
-                Inner.HSplitTop(LineSize, &ZzButton, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ZzSpoofVersionId,
-                        &g_Config.m_ZzSpoofVersionId, &ZzButton, Localize("Version ID"), 10000, 21000);
-
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ZzSpoofGitHashEnabled, Localize("Spoof Git hash"),
-                        &g_Config.m_ZzSpoofGitHashEnabled, &Inner, LineSize);
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 200.0f, Localize("Dummy Manager"), Inner);
-                CUIRect Row;
-                Inner.HSplitTop(LineSize, &Row, &Inner);
-                CUIRect B0, B1, B2;
-                Row.VSplitLeft(Row.w / 3.0f, &B0, &Row);
-                Row.VSplitLeft(Row.w / 2.0f, &B1, &B2);
-                B0.HMargin(1.0f, &B0);
-                B1.HMargin(1.0f, &B1);
-                B2.HMargin(1.0f, &B2);
-                static CButtonContainer s_DummyMainBtn, s_Dummy1Btn, s_Dummy2Btn;
-                const bool IsMain = (g_Config.m_ClDummy == IClient::CONN_MAIN);
-                const bool IsDummy1 = (g_Config.m_ClDummy == IClient::CONN_DUMMY);
-                const bool IsDummy2 = (g_Config.m_ClDummy == IClient::CONN_DUMMY2);
-                if(DoButton_MenuTab(&s_DummyMainBtn, Localize("Main"), IsMain, &B0, IGraphics::CORNER_ALL, nullptr, nullptr, nullptr, nullptr, 12.0f))
-                        g_Config.m_ClDummy = IClient::CONN_MAIN;
-                const bool Dummy1Avail = Client()->DummyConnected(IClient::CONN_DUMMY);
-                if(DoButton_MenuTab(&s_Dummy1Btn, Dummy1Avail ? Localize("Dummy 1") : Localize("Dummy 1 (off)"), IsDummy1, &B1, IGraphics::CORNER_ALL, nullptr, nullptr, nullptr, nullptr, 12.0f) && Dummy1Avail)
-                        g_Config.m_ClDummy = IClient::CONN_DUMMY;
-                const bool Dummy2Avail = Client()->DummyConnected(IClient::CONN_DUMMY2);
-                if(DoButton_MenuTab(&s_Dummy2Btn, Dummy2Avail ? Localize("Dummy 2") : Localize("Dummy 2 (off)"), IsDummy2, &B2, IGraphics::CORNER_ALL, nullptr, nullptr, nullptr, nullptr, 12.0f) && Dummy2Avail)
-                        g_Config.m_ClDummy = IClient::CONN_DUMMY2;
-                Inner.HSplitTop(LineSize, &Row, &Inner);
-                static CButtonContainer s_Dummy2ConnectBtn;
-                if(Dummy2Avail) {
-                        if(DoButton_Menu(&s_Dummy2ConnectBtn, Localize("Disconnect Dummy 2"), 0, &Row)) {
-                                Client()->DummyDisconnect(nullptr, IClient::CONN_DUMMY2);
-                                if(g_Config.m_ClDummy == IClient::CONN_DUMMY2) g_Config.m_ClDummy = IClient::CONN_MAIN;
-                        }
-                } else if(Client()->DummyConnecting(IClient::CONN_DUMMY2)) {
-                        DoButton_Menu(&s_Dummy2ConnectBtn, Localize("Connecting Dummy 2..."), 1, &Row);
-                } else {
-                        const bool Dummy1Ok = Client()->DummyConnected(IClient::CONN_DUMMY) || Client()->DummyConnecting(IClient::CONN_DUMMY);
-                        if(DoButton_Menu(&s_Dummy2ConnectBtn, Localize("Connect Dummy 2"), Dummy1Ok ? 0 : 1, &Row) && Dummy1Ok)
-                                Client()->DummyConnect(IClient::CONN_DUMMY2);
-                }
-        }
-
-        // Zz: Восстановленные блоки (LineSize уже объявлен в начале функции)
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 220.0f, Localize("Laser Unfreeze"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoUnfreeze, Localize("Auto-unfreeze"),
-                        &g_Config.m_ClZzAutoUnfreeze, &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoUnfreezeAutoLaser, Localize("Auto laser"),
-                        &g_Config.m_ClZzAutoUnfreezeAutoLaser, &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzAutoUnfreezeFov,
-                        &g_Config.m_ClZzAutoUnfreezeFov, &Button, Localize("FOV"), 5, 360);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzAutoUnfreezeAngles,
-                        &g_Config.m_ClZzAutoUnfreezeAngles, &Button, Localize("Angles"), 1, 144);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoUnfreezeSilent, Localize("Silent"),
-                        &g_Config.m_ClZzAutoUnfreezeSilent, &Inner, LineSize);
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(RightView, 305.0f, Localize("Utility"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoAled, Localize("Auto aled enabled?"),
-                        &g_Config.m_ClZzAutoAled, &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoShotgun, Localize("Auto-shotgun"),
-                        &g_Config.m_ClZzAutoShotgun, &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoUnfreezeDebugRecord,
-                        Localize("Auto-unfreeze debug recording"),
-                        &g_Config.m_ClZzAutoUnfreezeDebugRecord, &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzFreezeFullDebugRecord,
-                        Localize("Full freeze session recording"),
-                        &g_Config.m_ClZzFreezeFullDebugRecord, &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzForceZoom, Localize("Force zoom"),
-                        &g_Config.m_ClZzForceZoom, &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzFakePing,
-                        &g_Config.m_ClZzFakePing, &Button,
-                        Localize("Fake ping (ms, 0=off)"), 0, 999);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzSensBoost,
-                        Localize("Sensitivity x5 boost"), &g_Config.m_ClZzSensBoost,
-                        &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzSensBoost5000,
-                        Localize("Sensitivity x5000 boost"), &g_Config.m_ClZzSensBoost5000,
-                        &Inner, LineSize);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzSpinAim,
-                        Localize("Fake Aim"), &g_Config.m_ClZzSpinAim,
-                        &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzSpinAimSpeed,
-                        &g_Config.m_ClZzSpinAimSpeed, &Button,
-                        Localize("Speed"), 0, 75);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzSpinAimShowMe,
-                        Localize("Show me"), &g_Config.m_ClZzSpinAimShowMe,
-                        &Inner, LineSize);
-                Inner.HSplitTop(8.0f, nullptr, &Inner);
-                Inner.HSplitTop(LineSize, &Label, &Inner);
-                Ui()->DoLabel(&Label, Localize("Companion"), 15.0f, TEXTALIGN_ML);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzCompanionEnabled, Localize("Companion enabled"),
-                        &g_Config.m_ClZzCompanionEnabled, &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzCompanionFollowTiles,
-                        &g_Config.m_ClZzCompanionFollowTiles, &Button,
-                        Localize("Follow distance (tiles)"), 0, 30);
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 40.0f, Localize("Smart Double Jump"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_TcSmartDoubleJump, Localize("Auto-jump near freeze"), &g_Config.m_TcSmartDoubleJump, &Inner, LineSize);
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 220.0f, Localize("Auto Message"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_TcAutoMessage, Localize("Enable auto message"), &g_Config.m_TcAutoMessage, &Inner, LineSize);
-                char aMsgSuffix[32];
-                str_format(aMsgSuffix, sizeof(aMsgSuffix), " %s", Localize("sec"));
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_TcAutoMessageInterval, &g_Config.m_TcAutoMessageInterval, &Button, Localize("Interval"), 10, 3600, &CUi::ms_LogarithmicScrollbarScale, 0, aMsgSuffix);
-                Inner.HSplitTop(LineSize, &Label, &Inner);
-                Ui()->DoLabel(&Label, Localize("Message"), 14.0f, TEXTALIGN_ML);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                static CLineInput s_AutoMessageInput(g_Config.m_TcAutoMessageText, sizeof(g_Config.m_TcAutoMessageText));
-                Ui()->DoEditBox(&s_AutoMessageInput, &Button, 14.0f);
-                Inner.HSplitTop(8.0f, nullptr, &Inner);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                static CButtonContainer s_SendNowButton;
-                if(DoButton_Menu(&s_SendNowButton, Localize("Send now"), 0, &Button))
-                        GameClient()->m_TClient.SendAutoMessageNow();
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 180.0f, Localize("Spam Emote"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_TcSpamEmote, Localize("Spam Emote"), &g_Config.m_TcSpamEmote, &Inner, LineSize);
-                {
-                        static std::vector<const char *> s_vModeNames;
-                        s_vModeNames = {Localize("All emotes in order"), Localize("Random emotes"), Localize("Single emote")};
-                        static CUi::SDropDownState s_ModeDropDownState;
-                        static CScrollRegion s_ModeDropDownScrollRegion;
-                        s_ModeDropDownState.m_SelectionPopupContext.m_pScrollRegion = &s_ModeDropDownScrollRegion;
-                        CUIRect DropDownRect;
-                        Inner.HSplitTop(LineSize, &DropDownRect, &Inner);
-                        DropDownRect.VSplitLeft(120.0f, &Label, &DropDownRect);
-                        Ui()->DoLabel(&Label, Localize("Mode"), 14.0f, TEXTALIGN_ML);
-                        g_Config.m_TcSpamEmoteMode = Ui()->DoDropDown(&DropDownRect, g_Config.m_TcSpamEmoteMode, s_vModeNames.data(), s_vModeNames.size(), s_ModeDropDownState);
-                }
-                if(g_Config.m_TcSpamEmoteMode == 2)
-                {
-                        Inner.HSplitTop(LineSize, &Button, &Inner);
-                        Ui()->DoScrollbarOption(&g_Config.m_TcSpamEmoteId, &g_Config.m_TcSpamEmoteId, &Button, Localize("Emote"), 1, 16);
-                }
-                char aSpamSuffix[32];
-                str_format(aSpamSuffix, sizeof(aSpamSuffix), " %s", Localize("ms"));
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_TcSpamEmoteInterval, &g_Config.m_TcSpamEmoteInterval, &Button, Localize("Delay"), 50, 5000, &CUi::ms_LogarithmicScrollbarScale, 0, aSpamSuffix);
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(RightView, 95.0f, Localize("Click GUI"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzClickGui, Localize("Show ClickGUI"),
-                        &g_Config.m_ClZzClickGui, &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Label, &Inner);
-                Ui()->DoLabel(&Label, Localize("Open / close direct key"), 14.0f,
-                        TEXTALIGN_ML);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                static CButtonContainer s_ClickGuiKeyReader;
-                static CButtonContainer s_ClickGuiKeyClear;
-                const CBindSlot CurrentClickGuiBind(g_Config.m_ClZzClickGuiKey,
-                        g_Config.m_ClZzClickGuiMod);
-                const auto Result = GameClient()->m_KeyBinder.DoKeyReader(
-                        &s_ClickGuiKeyReader, &s_ClickGuiKeyClear, &Button,
-                        CurrentClickGuiBind, false);
-                if(!Result.m_Aborted && Result.m_Bind != CurrentClickGuiBind)
-                {
-                        g_Config.m_ClZzClickGuiKey = Result.m_Bind.m_Key;
-                        g_Config.m_ClZzClickGuiMod = Result.m_Bind.m_ModifierMask;
-                }
-        }
-
-        // Zz: Spoofer (Aether style)
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 220.0f, Localize("Spoofer"), Inner);
-
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ZzSpoofClientStr, Localize("Enable Spoofer"),
-                        &g_Config.m_ZzSpoofClientStr, &Inner, LineSize);
-
-                {
-                        CUIRect RowLabel, RowDropDown;
-                        Inner.HSplitTop(LineSize, &RowLabel, &Inner);
-                        Ui()->DoLabel(&RowLabel, Localize("Client preset"), 14.0f, TEXTALIGN_ML);
-                        std::array<const char *, 4> aZzPresetNames = {"DDNet", "TClient", "BestClient", "Custom"};
-                        static CUi::SDropDownState s_ZzSpoofPresetDropDownState;
-                        static CScrollRegion s_ZzSpoofPresetDropDownScrollRegion;
-                        s_ZzSpoofPresetDropDownState.m_SelectionPopupContext.m_pScrollRegion = &s_ZzSpoofPresetDropDownScrollRegion;
-                        const int OldVal = std::clamp(g_Config.m_ZzSpoofClientPreset, 0, 3);
-                        Inner.HSplitTop(LineSize, &RowDropDown, &Inner);
-                        const int NewVal = Ui()->DoDropDown(&RowDropDown, OldVal, aZzPresetNames.data(), aZzPresetNames.size(), s_ZzSpoofPresetDropDownState);
-                        if(NewVal != OldVal) {
-                                g_Config.m_ZzSpoofClientPreset = NewVal;
-                                if(NewVal == 0) {
-                                        str_copy(g_Config.m_ZzSpoofClientName, "DDNet", sizeof(g_Config.m_ZzSpoofClientName));
-                                        str_copy(g_Config.m_ZzSpoofClientVersion, "19.8.2", sizeof(g_Config.m_ZzSpoofClientVersion));
-                                        g_Config.m_ZzSpoofVersionId = 19082;
-                                } else if(NewVal == 1) {
-                                        str_copy(g_Config.m_ZzSpoofClientName, "TClient", sizeof(g_Config.m_ZzSpoofClientName));
-                                        str_copy(g_Config.m_ZzSpoofClientVersion, "10.9.0", sizeof(g_Config.m_ZzSpoofClientVersion));
-                                        g_Config.m_ZzSpoofVersionId = 20010;
-                                        str_copy(g_Config.m_ZzSpoofGitHash, "2e2aedc2e7b463a10b324a0f69d3fdb57", sizeof(g_Config.m_ZzSpoofGitHash));
-                                        g_Config.m_ZzSpoofGitHashEnabled = 1;
-                                } else if(NewVal == 2) {
-                                        str_copy(g_Config.m_ZzSpoofClientName, "BestClient", sizeof(g_Config.m_ZzSpoofClientName));
-                                        str_copy(g_Config.m_ZzSpoofClientVersion, "2.1.1 stable-beta", sizeof(g_Config.m_ZzSpoofClientVersion));
-                                        g_Config.m_ZzSpoofVersionId = 19080;
-                                        str_copy(g_Config.m_ZzSpoofGitHash, "0df5194057d68a7708b282c5c8245308", sizeof(g_Config.m_ZzSpoofGitHash));
-                                        g_Config.m_ZzSpoofGitHashEnabled = 1;
-                                }
-                        }
-                }
-
-                CUIRect ZzButton;
-                Inner.HSplitTop(LineSize, &ZzButton, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ZzSpoofVersionId,
-                        &g_Config.m_ZzSpoofVersionId, &ZzButton, Localize("Version ID"), 10000, 21000);
-
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ZzSpoofGitHashEnabled, Localize("Spoof Git hash"),
-                        &g_Config.m_ZzSpoofGitHashEnabled, &Inner, LineSize);
-        }
-
-        {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 200.0f, Localize("Dummy Manager"), Inner);
-                CUIRect Row;
-                Inner.HSplitTop(LineSize, &Row, &Inner);
-                CUIRect B0, B1, B2;
-                Row.VSplitLeft(Row.w / 3.0f, &B0, &Row);
-                Row.VSplitLeft(Row.w / 2.0f, &B1, &B2);
-                B0.HMargin(1.0f, &B0);
-                B1.HMargin(1.0f, &B1);
-                B2.HMargin(1.0f, &B2);
-                static CButtonContainer s_DummyMainBtn, s_Dummy1Btn, s_Dummy2Btn;
-                const bool IsMain = (g_Config.m_ClDummy == IClient::CONN_MAIN);
-                const bool IsDummy1 = (g_Config.m_ClDummy == IClient::CONN_DUMMY);
-                const bool IsDummy2 = (g_Config.m_ClDummy == IClient::CONN_DUMMY2);
-                if(DoButton_MenuTab(&s_DummyMainBtn, Localize("Main"), IsMain, &B0, IGraphics::CORNER_ALL, nullptr, nullptr, nullptr, nullptr, 12.0f))
-                        g_Config.m_ClDummy = IClient::CONN_MAIN;
-                const bool Dummy1Avail = Client()->DummyConnected(IClient::CONN_DUMMY);
-                if(DoButton_MenuTab(&s_Dummy1Btn, Dummy1Avail ? Localize("Dummy 1") : Localize("Dummy 1 (off)"), IsDummy1, &B1, IGraphics::CORNER_ALL, nullptr, nullptr, nullptr, nullptr, 12.0f) && Dummy1Avail)
-                        g_Config.m_ClDummy = IClient::CONN_DUMMY;
-                const bool Dummy2Avail = Client()->DummyConnected(IClient::CONN_DUMMY2);
-                if(DoButton_MenuTab(&s_Dummy2Btn, Dummy2Avail ? Localize("Dummy 2") : Localize("Dummy 2 (off)"), IsDummy2, &B2, IGraphics::CORNER_ALL, nullptr, nullptr, nullptr, nullptr, 12.0f) && Dummy2Avail)
-                        g_Config.m_ClDummy = IClient::CONN_DUMMY2;
-                Inner.HSplitTop(LineSize, &Row, &Inner);
-                static CButtonContainer s_Dummy2ConnectBtn;
-                if(Dummy2Avail) {
-                        if(DoButton_Menu(&s_Dummy2ConnectBtn, Localize("Disconnect Dummy 2"), 0, &Row)) {
-                                Client()->DummyDisconnect(nullptr, IClient::CONN_DUMMY2);
-                                if(g_Config.m_ClDummy == IClient::CONN_DUMMY2) g_Config.m_ClDummy = IClient::CONN_MAIN;
-                        }
-                } else if(Client()->DummyConnecting(IClient::CONN_DUMMY2)) {
-                        DoButton_Menu(&s_Dummy2ConnectBtn, Localize("Connecting Dummy 2..."), 1, &Row);
-                } else {
-                        const bool Dummy1Ok = Client()->DummyConnected(IClient::CONN_DUMMY) || Client()->DummyConnecting(IClient::CONN_DUMMY);
-                        if(DoButton_Menu(&s_Dummy2ConnectBtn, Localize("Connect Dummy 2"), Dummy1Ok ? 0 : 1, &Row) && Dummy1Ok)
-                                Client()->DummyConnect(IClient::CONN_DUMMY2);
-                }
-        }
-}
+	}
 	else if(s_SubTab == 3)
 	{
 		const float LineSize = 20.0f;
@@ -2313,7 +1490,64 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
 			}
 		}
 	}
-	
+	else if(s_SubTab == 7)
+	{
+		const float LineSize = 20.0f;
+		CUIRect Left, Right;
+		MainView.VSplitMid(&Left, &Right, 20.0f);
+
+		{
+			CUIRect Inner, Button;
+			DoFeaturePanel(Left, 340.0f, Localize("Avoid"), Inner);
+			DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzAvoidEnabled,
+				Localize("Avoid freeze enabled?"), &g_Config.m_ClZzAvoidEnabled, &Inner, LineSize);
+			DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzAvoidFreeze,
+				Localize("Avoid freeze"), &g_Config.m_ClZzAvoidFreeze, &Inner, LineSize);
+			DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzAvoidTele,
+				Localize("Avoid tele"), &g_Config.m_ClZzAvoidTele, &Inner, LineSize);
+			DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzAvoidKill,
+				Localize("Avoid kill"), &g_Config.m_ClZzAvoidKill, &Inner, LineSize);
+			DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzAvoidDirection,
+				Localize("Allow direction"), &g_Config.m_ClZzAvoidDirection, &Inner, LineSize);
+			DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzAvoidJump,
+				Localize("Allow jump"), &g_Config.m_ClZzAvoidJump, &Inner, LineSize);
+			DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzAvoidHookAssist,
+				Localize("Hook assist"), &g_Config.m_ClZzAvoidHookAssist, &Inner, LineSize);
+			DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzAvoidAim,
+				Localize("Allow aim"), &g_Config.m_ClZzAvoidAim, &Inner, LineSize);
+			DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzAvoidSilent,
+				Localize("Silent"), &g_Config.m_ClZzAvoidSilent, &Inner, LineSize);
+		}
+
+		{
+			CUIRect Inner, Button;
+			DoFeaturePanel(Right, 340.0f, Localize("Avoid tuning"), Inner);
+			Inner.HSplitTop(LineSize, &Button, &Inner);
+			Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidLookahead,
+				&g_Config.m_ClZzAvoidLookahead, &Button,
+				Localize("Lookahead"), 4, 128);
+			Inner.HSplitTop(LineSize, &Button, &Inner);
+			Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidHookAssistRange,
+				&g_Config.m_ClZzAvoidHookAssistRange, &Button,
+				Localize("Hook range"), 16, 512);
+			Inner.HSplitTop(LineSize, &Button, &Inner);
+			Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidTicks,
+				&g_Config.m_ClZzAvoidTicks, &Button,
+				Localize("Simulation ticks"), 1, 20);
+			Inner.HSplitTop(LineSize, &Button, &Inner);
+			Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidTriggerTicks,
+				&g_Config.m_ClZzAvoidTriggerTicks, &Button,
+				Localize("Trigger ticks"), 1, 20);
+			Inner.HSplitTop(LineSize, &Button, &Inner);
+			Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidFov,
+				&g_Config.m_ClZzAvoidFov, &Button,
+				Localize("FOV"), 5, 360);
+			Inner.HSplitTop(LineSize, &Button, &Inner);
+			Ui()->DoScrollbarOption(&g_Config.m_ClZzAvoidAngles,
+				&g_Config.m_ClZzAvoidAngles, &Button,
+				Localize("Angles"), 1, 144);
+		}
+	}
 
 	TextRender()->TextColor(OldTextColor);
 }
