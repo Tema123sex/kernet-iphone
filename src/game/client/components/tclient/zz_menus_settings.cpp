@@ -653,7 +653,10 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
                         &s_ClickGuiKeyReader, &s_ClickGuiKeyClear, &Button,
                         CurrentClickGuiBind, false);
                 if(!Result.m_Aborted && Result.m_Bind != CurrentClickGuiBind)
-
+                {
+                        g_Config.m_ClZzClickGuiKey = Result.m_Bind.m_Key;
+                        g_Config.m_ClZzClickGuiMod = Result.m_Bind.m_ModifierMask;
+                }
         }
 
         // Zz: Spoofer (Aether style)
