@@ -750,6 +750,12 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
                                 Client()->DummyConnect(IClient::CONN_DUMMY2);
                 }
         }
+        CUIRect MiscContentEnd = MainView;
+        MiscContentEnd.y = maximum(LeftView.y, RightView.y);
+        MiscContentEnd.h = 0.0f;
+        s_MiscScrollRegion.AddRect(MiscContentEnd);
+        s_MiscScrollRegion.End();
+
 }
 	else if(s_SubTab == 3)
 	{
@@ -762,15 +768,7 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
 		DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzHookFly,
 			Localize("Hook fly"), &g_Config.m_ClZzHookFly, &Inner, LineSize);
 		DoButton_CheckBoxAutoVMarginAndSet(&g_Config.m_ClZzTripleFly,
-			Localize("Triple
-        CUIRect MiscContentEnd = MainView;
-        MiscContentEnd.y = maximum(LeftView.y, RightView.y);
-        MiscContentEnd.h = 0.0f;
-        s_MiscScrollRegion.AddRect(MiscContentEnd);
-        s_MiscScrollRegion.End();
-
-
- fly"), &g_Config.m_ClZzTripleFly, &Inner, LineSize);
+			Localize("Triple Fly"), &g_Config.m_ClZzTripleFly, &Inner, LineSize);
 		Inner.HSplitTop(LineSize, &Button, &Inner);
 		Ui()->DoScrollbarOption(&g_Config.m_ClZzFlyHelperHitTiles,
 			&g_Config.m_ClZzFlyHelperHitTiles, &Button,
