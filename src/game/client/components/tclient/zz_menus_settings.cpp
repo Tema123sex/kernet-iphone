@@ -762,6 +762,12 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
         s_MiscScrollRegion.AddRect(MiscContentEnd);
         s_MiscScrollRegion.End();
 
+        CUIRect MiscContentEnd = MainView;
+        MiscContentEnd.y = maximum(LeftView.y, RightView.y);
+        MiscContentEnd.h = 0.0f;
+        s_MiscScrollRegion.AddRect(MiscContentEnd);
+        s_MiscScrollRegion.End();
+
 }
 	else if(s_SubTab == 3)
 	{
