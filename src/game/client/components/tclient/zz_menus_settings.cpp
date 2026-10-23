@@ -532,7 +532,7 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
 
         {
                 CUIRect Inner;
-                DoFeaturePanel(RightView, 250.0f, Localize("Utility"), Inner);
+                DoFeaturePanel(RightView, 400.0f, Localize("Utility"), Inner);
                 DoButton_CheckBoxAutoVMarginAndSet(
                         &g_Config.m_ClZzAutoAled, Localize("Auto aled enabled?"),
                         &g_Config.m_ClZzAutoAled, &Inner, LineSize);
