@@ -78,7 +78,7 @@ bool CLaserUnfreeze::IsActive() const
 	if(Client()->State() != IClient::STATE_ONLINE && Client()->State() != IClient::STATE_DEMOPLAYBACK)
 		return false;
 	const int LocalId = GameClient()->m_Snap.m_LocalClientId;
-	if(LocalId < 0)
+	if(LocalId < 0 || LocalId >= MAX_CLIENTS)
 		return false;
 	if(!GameClient()->m_Snap.m_pLocalCharacter)
 		return false;
@@ -474,6 +474,10 @@ void CLaserUnfreeze::OnPlayerInput(CNetObj_PlayerInput *pOut, CNetObj_PlayerInpu
 
 	int LastShot = m_LastFireTick;
 	const int LocalId = GameClient()->m_Snap.m_LocalClientId;
+	if(LocalId < 0 || LocalId >= MAX_CLIENTS)
+		return;
+	if(!GameClient()->m_Snap.m_aCharacters[LocalId].m_Active)
+		return;
 	if(GameClient()->m_Snap.m_aCharacters[LocalId].m_Cur.m_Weapon == WEAPON_LASER)
 		LastShot = std::max(LastShot, GameClient()->m_Snap.m_aCharacters[LocalId].m_Cur.m_AttackTick);
 	if(LastShot >= 0 && PredTick - LastShot < LU_RELOAD_TICKS)
