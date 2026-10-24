@@ -7946,7 +7946,7 @@ int CGameClient::OnSnapInput(int *pData, int Conn, bool Force)
 					ZzAutoUnfreezeOverridesInput = true;
 				}
 
-				const bool AutoUnfreezeActive =
+				const bool AutoUnfreezeActive = false; // FORCED OFF
 					false &&
 					!s_aAutoUnfreezeLaserInFlight[DummyIndex] && PredictionCoherent &&
 					s_aAutoUnfreezePathValid[DummyIndex] && !FrozenNow && !HardFrozen &&
