@@ -8899,7 +8899,7 @@ int CGameClient::OnSnapInput(int *pData, int Conn, bool Force)
 							if(!pInput->m_TargetX && !pInput->m_TargetY)
 								pInput->m_TargetY = 1;
 
-							if(AutoUnfreezeActive)
+							if(false && AutoUnfreezeActive)
 							{
 								if((pInput->m_Fire & 1) != 0)
 									pInput->m_Fire =
