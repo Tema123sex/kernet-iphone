@@ -7946,7 +7946,7 @@ int CGameClient::OnSnapInput(int *pData, int Conn, bool Force)
 					ZzAutoUnfreezeOverridesInput = true;
 				}
 
-				const bool AutoUnfreezeActive = false; // FORCED OFF
+				const bool AutoUnfreezeActive = false; // disabled // FORCED OFF
 					false &&
 					!s_aAutoUnfreezeLaserInFlight[DummyIndex] && PredictionCoherent &&
 					s_aAutoUnfreezePathValid[DummyIndex] && !FrozenNow && !HardFrozen &&
@@ -10431,12 +10431,12 @@ int CGameClient::OnSnapInput(int *pData, int Conn, bool Force)
 				ApplyAvoid(pInput, AvoidDummyIndex, AvoidLocalId, false,
 					FinalAvoidOverride);
 			}
-			ApplyKinetixLaserUnfreeze(pInput, AvoidDummyIndex,
+			/* ApplyKinetixLaserUnfreeze(pInput, AvoidDummyIndex,
 				AvoidLocalId);
 		}
 		else
 		{
-			ResetKinetixLaserUnfreeze();
+			/* ResetKinetixLaserUnfreeze(); */
 		}
 		return Size;
 	}
@@ -11093,7 +11093,7 @@ void CGameClient::OnReset()
 	m_FlyRideAledRetryTick = -1;
 	m_FlyRideAledLastDiagTick = -1;
 	InvalidateSnapshot();
-	ResetKinetixLaserUnfreeze();
+	/* ResetKinetixLaserUnfreeze(); */
 	for(auto &Observation : m_aAutoUnfreezeShotObservation)
 		Observation = {};
 	for(auto &DummyHistory : m_aaAutoUnfreezeTeeHistory)
@@ -11397,7 +11397,7 @@ void CGameClient::OnRender()
 		pComponent->OnRender();
 	}
 	Graphics()->SetScreenAspectOverride(0.0f);
-	RenderKinetixLaserUnfreezeAttempt();
+	/* RenderKinetixLaserUnfreezeAttempt(); */
 
 	// clear all events/input for this frame
 	Input()->Clear();
