@@ -15,21 +15,7 @@
 #include <game/client/prediction/entities/character.h>
 #include <game/client/prediction/gameworld.h>
 
-#include <cstdio>
-#include <cstring>
-
-static void LU_Log(const char *pMsg)
-{
-FILE *f = fopen("/storage/emulated/0/Download/lu.log", "a");
-if(!f)
-f = fopen("/sdcard/lu.log", "a");
-if(!f)
-return;
-fprintf(f, "%s\n", pMsg);
-fflush(f);
-fclose(f);
-}
-
+static void LU_Log(const char *pMsg) { (void)pMsg; }
 
 static const float LU_TEE_RADIUS = 28.0f;
 
