@@ -5,6 +5,7 @@
 #include <vector>
 
 #include <engine/shared/config.h>
+#include <engine/storage.h>
 
 #include <game/collision.h>
 #include <game/mapitems.h>
@@ -36,6 +37,20 @@ static const int LU_TURN_TICKS = 16;
 
 static const float LU_TEE_DRIFT = 6.0f;
 static const float LU_TEE_DRIFT_MAX = 96.0f;
+
+
+static void LU_Log(IStorage *pStorage, const char *pMsg)
+{
+if(!pStorage)
+return;
+IOHANDLE File = pStorage->OpenFile("lu.log", IOFLAG_APPEND, IStorage::TYPE_SAVE);
+if(!File)
+return;
+char aBuf[512];
+int Len = str_format(aBuf, sizeof(aBuf), "%s\n", pMsg);
+io_write(File, aBuf, Len);
+io_close(File);
+}
 
 void CLaserUnfreeze::OnReset()
 {
@@ -120,17 +135,29 @@ int CLaserUnfreeze::SweepFreeze(vec2 Prev, vec2 Cur) const
 int CLaserUnfreeze::PredictWorld(vec2 *pSelf, int *pFreeze, vec2 *pOther, bool *pOn, int Max, int Window, int OtherSim, bool *pDeep) const
 {
 	*pDeep = false;
+	IStorage *pSt = GameClient()->Storage();
+	LU_Log(pSt, "PredictWorld: entry");
 	const int LocalId = GameClient()->m_Snap.m_LocalClientId;
 	if(LocalId < 0 || LocalId >= MAX_CLIENTS)
+	{
+		LU_Log(pSt, "PredictWorld: LocalId out of range");
 		return -1;
+	}
 	if(!GameClient()->m_PredictedWorld.GetCharacterById(LocalId))
+	{
+		LU_Log(pSt, "PredictWorld: no char in PredictedWorld");
 		return -1;
+	}
 
 	CGameWorld SimWorld;
 	SimWorld.CopyWorld(&GameClient()->m_PredictedWorld);
+	LU_Log(pSt, "PredictWorld: CopyWorld ok");
 	CCharacter *pSelfChar = SimWorld.GetCharacterById(LocalId);
 	if(!pSelfChar)
+	{
+		LU_Log(pSt, "PredictWorld: no char in SimWorld");
 		return -1;
+	}
 
 	for(int i = 0; i < MAX_CLIENTS; i++)
 	{
@@ -160,7 +187,9 @@ int CLaserUnfreeze::PredictWorld(vec2 *pSelf, int *pFreeze, vec2 *pOther, bool *
 		pSelfChar->OnDirectInput(&In);
 		SimWorld.m_GameTick++;
 		pSelfChar->OnPredictedInput(&In);
+		LU_Log(pSt, "PredictWorld: before Tick");
 		SimWorld.Tick();
+		LU_Log(pSt, "PredictWorld: after Tick");
 
 		pSelfChar = SimWorld.GetCharacterById(LocalId);
 		if(!pSelfChar)
@@ -245,6 +274,7 @@ bool CLaserUnfreeze::Sticks(const int *pFreeze, int TrajLen, int From) const
 
 bool CLaserUnfreeze::TraceSelfShot(vec2 Dir, const SPlan &Plan, int *pOutHitIdx, float *pOutMiss, int MaxUsefulIdx) const
 {
+	LU_Log(GameClient()->Storage(), "TraceSelfShot: entry");
 	if(length(Dir) < 0.001f)
 		return false;
 	if(!Collision() || Collision()->GetWidth() <= 0)
@@ -357,6 +387,7 @@ bool CLaserUnfreeze::QuantizeDir(vec2 Dir, int *pTx, int *pTy, vec2 *pUnit) cons
 
 void CLaserUnfreeze::Fire(CNetObj_PlayerInput *pOut, CNetObj_PlayerInput *pPersistent, int Tx, int Ty, int PredTick)
 {
+	LU_Log(GameClient()->Storage(), "Fire: entry");
 	if(Tx == 0 && Ty == 0)
 		return;
 
@@ -409,6 +440,7 @@ bool CLaserUnfreeze::HoldTurn(CNetObj_PlayerInput *pOut, int PredTick)
 
 void CLaserUnfreeze::OnRender()
 {
+	LU_Log(GameClient()->Storage(), "OnRender: entry");
 	if(g_Config.m_ClZzAutoUnfreezeSilent)
 		return;
 	if(Client()->State() != IClient::STATE_ONLINE && Client()->State() != IClient::STATE_DEMOPLAYBACK)
