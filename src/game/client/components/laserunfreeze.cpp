@@ -71,12 +71,20 @@ bool CLaserUnfreeze::IsActive() const
 
 	if(GameClient()->m_PredictedChar.m_LaserHitDisabled)
 		return false;
+	if(g_Config.m_ClDummy < 0 || g_Config.m_ClDummy >= NUM_DUMMIES)
+		return false;
+	if(!Collision())
+		return false;
+	if(Collision()->GetWidth() <= 0)
+		return false;
 	return true;
 }
 
 int CLaserUnfreeze::FreezeKindAt(vec2 Pos) const
 {
 	const CCollision *pCol = Collision();
+	if(!pCol || pCol->GetWidth() <= 0 || pCol->GetHeight() <= 0)
+		return LU_FREEZE_NONE;
 	const int Nx = std::clamp((int)Pos.x / 32, 0, pCol->GetWidth() - 1);
 	const int Ny = std::clamp((int)Pos.y / 32, 0, pCol->GetHeight() - 1);
 	const int Idx = Ny * pCol->GetWidth() + Nx;
@@ -113,6 +121,10 @@ int CLaserUnfreeze::PredictWorld(vec2 *pSelf, int *pFreeze, vec2 *pOther, bool *
 {
 	*pDeep = false;
 	const int LocalId = GameClient()->m_Snap.m_LocalClientId;
+	if(LocalId < 0 || LocalId >= MAX_CLIENTS)
+		return -1;
+	if(!GameClient()->m_PredictedWorld.GetCharacterById(LocalId))
+		return -1;
 
 	CGameWorld SimWorld;
 	SimWorld.CopyWorld(&GameClient()->m_PredictedWorld);
@@ -234,6 +246,8 @@ bool CLaserUnfreeze::Sticks(const int *pFreeze, int TrajLen, int From) const
 bool CLaserUnfreeze::TraceSelfShot(vec2 Dir, const SPlan &Plan, int *pOutHitIdx, float *pOutMiss, int MaxUsefulIdx) const
 {
 	if(length(Dir) < 0.001f)
+		return false;
+	if(!Collision() || Collision()->GetWidth() <= 0)
 		return false;
 	Dir = normalize(Dir);
 
