@@ -302,6 +302,7 @@ bool CLaserUnfreeze::TraceSelfShot(vec2 Dir, const SPlan &Plan, int *pOutHitIdx,
 		vec2 Coltile = To;
 		vec2 Before = To;
 		int z = 0;
+		if(!Collision()) return false;
 		const int Res = Collision()->IntersectLineTeleWeapon(Pos, To, &Coltile, &Before, &z);
 		if(Res)
 			To = Before;
@@ -368,6 +369,7 @@ bool CLaserUnfreeze::TraceSelfShot(vec2 Dir, const SPlan &Plan, int *pOutHitIdx,
 
 		vec2 TempPos = Before;
 		vec2 TempDir = Dir * 4.0f;
+		if(!Collision()) return false;
 		Collision()->MovePoint(&TempPos, &TempDir, 1.0f, nullptr);
 		Energy -= distance(Pos, TempPos) + BounceCost;
 		Pos = TempPos;
@@ -399,6 +401,8 @@ void CLaserUnfreeze::Fire(CNetObj_PlayerInput *pOut, CNetObj_PlayerInput *pPersi
 	pOut->m_TargetY = Ty;
 	m_Claimed = true;
 
+	if(!GameClient()->m_Snap.m_pLocalCharacter)
+		return;
 	if(GameClient()->m_PredictedChar.m_ActiveWeapon != WEAPON_LASER)
 		return;
 
@@ -526,6 +530,8 @@ void CLaserUnfreeze::OnPlayerInput(CNetObj_PlayerInput *pOut, CNetObj_PlayerInpu
 	Plan.m_FreezeIdx = FreezeIdx;
 	Plan.m_MaxBounces = MaxBounces;
 
+	if(g_Config.m_ClDummy < 0 || g_Config.m_ClDummy >= NUM_DUMMIES)
+		return;
 	Plan.m_BounceCost = (float)GameClient()->m_aTuning[g_Config.m_ClDummy].m_LaserBounceCost;
 	Plan.m_Reach = (float)GameClient()->m_aTuning[g_Config.m_ClDummy].m_LaserReach;
 
