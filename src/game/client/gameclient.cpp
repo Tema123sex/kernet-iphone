@@ -5774,7 +5774,7 @@ int CGameClient::OnSnapInput(int *pData, int Conn, bool Force)
 		if((pInput->m_PlayerFlags & PLAYERFLAG_PLAYING) == 0)
 			return Size;
 
-		AutoUnfreezeDebugUpdateRecording();
+		// AutoUnfreezeDebugUpdateRecording(); // отключено: старый AutoUnfreeze
 		const CNetObj_PlayerInput OrigInput = *pInput;
 		bool AvoidAllowed = true;
 		if(m_Snap.m_pLocalCharacter)
@@ -8384,9 +8384,7 @@ int CGameClient::OnSnapInput(int *pData, int Conn, bool Force)
 								const uint64_t LearningKey =
 									LearningKeyFor(InitialDir, ExpectedHitDelay, MaxHitBounces);
 								*pHitQuality = BaseQuality +
-									       (AutoUnfreezeActive ? AutoUnfreezeLearningBias(
-													     DummyIndex, LearningKey, AnalysisTick) :
-												     0.0f);
+									       0.0f;
 							}
 							if(pHitBounces)
 								*pHitBounces = MaxHitBounces;
@@ -13268,7 +13266,7 @@ void CGameClient::OnNewSnapshot(bool DummySwapped)
 
 	SnapCollectEntities(); // creates a collection that associates EntityEx snap
 			       // items with the entities they belong to
-	AutoUnfreezeObserveRawLasers();
+	// AutoUnfreezeObserveRawLasers(); // отключено: старый AutoUnfreeze
 
 	UpdateLocalTuning();
 	m_IsDummySwapping = 0;

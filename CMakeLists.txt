@@ -2688,6 +2688,8 @@ if(CLIENT)
     components/zz_hook_aimbot.h
     components/zz_visual_effects.cpp
     components/zz_visual_effects.h
+    components/laserunfreeze.cpp
+    components/laserunfreeze.h
     gameclient.cpp
     gameclient.h
     kog_ai_controller.cpp

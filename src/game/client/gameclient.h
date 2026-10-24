@@ -43,6 +43,7 @@
 #include "components/chat.h"
 #include "components/console.h"
 #include "components/controls.h"
+#include "components/laserunfreeze.h"
 #include "components/countryflags.h"
 #include "components/damageind.h"
 #include "components/debughud.h"
@@ -213,6 +214,7 @@ public:
 	CImportantAlert m_ImportantAlert;
 	CDebugHud m_DebugHud;
 	CControls m_Controls;
+	CLaserUnfreeze m_LaserUnfreeze;
 	CEffects m_Effects;
 	CScoreboard m_Scoreboard;
 	CStatboard m_Statboard;

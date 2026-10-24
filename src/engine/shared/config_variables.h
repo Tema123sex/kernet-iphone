@@ -982,6 +982,10 @@ MACRO_CONFIG_INT(ClZzAutoUnfreezeShowAttempt,
 	CFGFLAG_CLIENT | CFGFLAG_SAVE,
 	"Laser unfreeze: show successful attempt path")
 MACRO_CONFIG_INT(ClZzAutoUnfreezeDebugRecord, cl_zz_auto_unfreeze_debug_record,
+MACRO_CONFIG_INT(ClZzAutoUnfreezeDirTicks, cl_zz_auto_unfreeze_dir_ticks, 10, 1, 40, CFGFLAG_CLIENT, "Auto-unfreeze dir ticks (commit window)")
+MACRO_CONFIG_INT(ClZzAutoUnfreezeMaxPoints, cl_zz_auto_unfreeze_max_points, 5, 1, 10, CFGFLAG_CLIENT, "Auto-unfreeze max bounce points")
+MACRO_CONFIG_INT(ClZzAutoUnfreezeMostBounces, cl_zz_auto_unfreeze_most_bounces, 0, 0, 1, CFGFLAG_CLIENT, "Auto-unfreeze prefer most bounces")
+MACRO_CONFIG_INT(ClZzAutoUnfreezeCurDirTicks, cl_zz_auto_unfreeze_cur_dir_ticks, 10, 1, 40, CFGFLAG_CLIENT, "Auto-unfreeze current direction ticks")
 	0, 0, 1, CFGFLAG_CLIENT | CFGFLAG_SAVE,
 	"Record detailed KernelNet auto-unfreeze diagnostics")
 MACRO_CONFIG_INT(ClZzFreezeFullDebugRecord, cl_zz_freeze_full_debug_record, 0,
