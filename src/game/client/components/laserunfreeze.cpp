@@ -468,6 +468,13 @@ void CLaserUnfreeze::OnPlayerInput(CNetObj_PlayerInput *pOut, CNetObj_PlayerInpu
 		return;
 
 	const int PredTick = Client()->PredGameTick(g_Config.m_ClDummy);
+	const int LocalId = GameClient()->m_Snap.m_LocalClientId;
+	if(LocalId < 0 || LocalId >= MAX_CLIENTS)
+		return;
+	if(!GameClient()->m_Snap.m_aCharacters[LocalId].m_Active)
+		return;
+	if(!GameClient()->m_PredictedWorld.GetCharacterById(LocalId))
+		return;
 
 	if(HoldTurn(pOut, PredTick))
 		return;
