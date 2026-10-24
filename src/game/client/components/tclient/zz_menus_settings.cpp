@@ -635,30 +635,7 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
                 Ui()->DoScrollbarOption(&g_Config.m_TcSpamEmoteInterval, &g_Config.m_TcSpamEmoteInterval, &Button, Localize("Delay"), 50, 5000, &CUi::ms_LogarithmicScrollbarScale, 0, aSpamSuffix);
         }
 
-        {
-                CUIRect Inner;
-                DoFeaturePanel(RightView, 95.0f, Localize("Click GUI"), Inner);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzClickGui, Localize("Show ClickGUI"),
-                        &g_Config.m_ClZzClickGui, &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Label, &Inner);
-                Ui()->DoLabel(&Label, Localize("Open / close direct key"), 14.0f,
-                        TEXTALIGN_ML);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                static CButtonContainer s_ClickGuiKeyReader;
-                static CButtonContainer s_ClickGuiKeyClear;
-                const CBindSlot CurrentClickGuiBind(g_Config.m_ClZzClickGuiKey,
-                        g_Config.m_ClZzClickGuiMod);
-                const auto Result = GameClient()->m_KeyBinder.DoKeyReader(
-                        &s_ClickGuiKeyReader, &s_ClickGuiKeyClear, &Button,
-                        CurrentClickGuiBind, false);
-                if(!Result.m_Aborted && Result.m_Bind != CurrentClickGuiBind)
 
-
-
-
-
-        }
 
         // Zz: Spoofer (Aether style)
         {
