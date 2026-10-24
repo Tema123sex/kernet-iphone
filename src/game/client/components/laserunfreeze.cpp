@@ -455,8 +455,9 @@ void CLaserUnfreeze::OnRender()
 
 	if(!m_FakeAngleSending || length(m_LastFireDir) < 0.001f)
 		return;
-	const int Dummy = g_Config.m_ClDummy;
-	GameClient()->m_Controls.m_aTargetPos[Dummy] = GameClient()->m_LocalCharacterPos + m_LastFireDir * 150.0f;
+    const int Dummy = g_Config.m_ClDummy;
+    if(Dummy >= 0 && Dummy < NUM_DUMMIES)
+        GameClient()->m_Controls.m_aTargetPos[Dummy] = GameClient()->m_LocalCharacterPos + m_LastFireDir * 150.0f;
 }
 
 void CLaserUnfreeze::OnPlayerInput(CNetObj_PlayerInput *pOut, CNetObj_PlayerInput *pPersistent)

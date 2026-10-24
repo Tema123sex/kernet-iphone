@@ -334,9 +334,11 @@ int CControls::SnapInput(int *pData)
 		for(auto &InputData : m_aInputData)
 			InputData.m_PlayerFlags |= PLAYERFLAG_SCOREBOARD;
 
-		// KernelNet: Laser Unfreeze (новый компонент)
-		if(Client()->State() == IClient::STATE_ONLINE || Client()->State() == IClient::STATE_DEMOPLAYBACK)
-			GameClient()->m_LaserUnfreeze.OnPlayerInput(&m_aInputData[g_Config.m_ClDummy], &m_aLastData[g_Config.m_ClDummy]);
+            if(GameClient() && g_Config.m_ClDummy >= 0 && g_Config.m_ClDummy < NUM_DUMMIES)
+            {
+                if(Client()->State() == IClient::STATE_ONLINE || Client()->State() == IClient::STATE_DEMOPLAYBACK)
+                    GameClient()->m_LaserUnfreeze.OnPlayerInput(&m_aInputData[g_Config.m_ClDummy], &m_aLastData[g_Config.m_ClDummy]);
+            }
 
 	bool Send = m_aLastData[g_Config.m_ClDummy].m_PlayerFlags != m_aInputData[g_Config.m_ClDummy].m_PlayerFlags;
 
