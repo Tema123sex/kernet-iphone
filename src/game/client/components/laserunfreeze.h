@@ -21,10 +21,10 @@ void OnPlayerInput(CNetObj_PlayerInput *pOut, CNetObj_PlayerInput *pPersistent);
 
 bool FakeAimAngle(float *pAngle) const
 {
-gleSending)
- false;
-gle = m_FakeAngle;
- true;
+if(!m_FakeAngleSending)
+return false;
+*pAngle = m_FakeAngle;
+return true;
 }
 
 bool m_Claimed = false;
@@ -32,22 +32,29 @@ bool m_Claimed = false;
 private:
 enum
 {
-ONE = 0,
-ORMAL,
+LU_FREEZE_NONE = 0,
+LU_FREEZE_NORMAL,
+LU_FREEZE_DEEP,
+};
 
+struct SPlan
 {
-st vec2 *m_pTraj;
-st int *m_pFreeze;
-st vec2 *m_pOther;
-st bool *m_pOn;
-st int *m_pActive;
-t m_NumActive;
-t m_Len;
-t m_FreezeIdx;
-t m_MaxBounces;
-t m_MaxViableSeg;
-ceCost;
-uantizeDir(vec2 Dir, int *pTx, int *pTy, vec2 *pUnit) const;
+const vec2 *m_pTraj;
+const int *m_pFreeze;
+const vec2 *m_pOther;
+const bool *m_pOn;
+const int *m_pActive;
+int m_NumActive;
+bool m_HasOthers;
+int m_Len;
+int m_FreezeIdx;
+int m_MaxBounces;
+int m_MaxViableSeg;
+float m_BounceCost;
+float m_Reach;
+};
+
+bool QuantizeDir(vec2 Dir, int *pTx, int *pTy, vec2 *pUnit) const;
 int FreezeKindAt(vec2 Pos) const;
 
 int SweepFreeze(vec2 Prev, vec2 Cur) const;
