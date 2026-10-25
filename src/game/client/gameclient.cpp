@@ -1255,6 +1255,7 @@ void CGameClient::OnConsoleInit()
 			&m_Binds,
 			&m_Binds.m_SpecialBinds,
 			&m_Controls,
+			&m_LaserUnfreeze,
 			&m_Camera,
 			&m_Sounds,
 			&m_Voting,
@@ -10431,12 +10432,7 @@ int CGameClient::OnSnapInput(int *pData, int Conn, bool Force)
 				ApplyAvoid(pInput, AvoidDummyIndex, AvoidLocalId, false,
 					FinalAvoidOverride);
 			}
-			/* ApplyKinetixLaserUnfreeze(pInput, AvoidDummyIndex,
-				AvoidLocalId);
-		}
-		else
-		{
-			/* ResetKinetixLaserUnfreeze(); */
+			// Old Kinetix laser unfreeze is replaced by CLaserUnfreeze.
 		}
 		return Size;
 	}

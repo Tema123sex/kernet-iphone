@@ -334,11 +334,6 @@ int CControls::SnapInput(int *pData)
 		for(auto &InputData : m_aInputData)
 			InputData.m_PlayerFlags |= PLAYERFLAG_SCOREBOARD;
 
-            if(GameClient() && g_Config.m_ClDummy >= 0 && g_Config.m_ClDummy < NUM_DUMMIES)
-            {
-                if(Client()->State() == IClient::STATE_ONLINE || Client()->State() == IClient::STATE_DEMOPLAYBACK)
-                    GameClient()->m_LaserUnfreeze.OnPlayerInput(&m_aInputData[g_Config.m_ClDummy], &m_aLastData[g_Config.m_ClDummy]);
-            }
 
 	bool Send = m_aLastData[g_Config.m_ClDummy].m_PlayerFlags != m_aInputData[g_Config.m_ClDummy].m_PlayerFlags;
 
@@ -1208,6 +1203,14 @@ int CControls::SnapInput(int *pData)
 			m_aInputData[g_Config.m_ClDummy].m_TargetX = (int)(std::sin(t * 3) * 100.0f);
 			m_aInputData[g_Config.m_ClDummy].m_TargetY = (int)(std::cos(t * 3) * 100.0f);
 		}
+
+		// CLaserUnfreeze must run after mouse target and fire were
+		// assembled above, otherwise its aim is overwritten.
+		if(Client()->State() == IClient::STATE_ONLINE ||
+			Client()->State() == IClient::STATE_DEMOPLAYBACK)
+			GameClient()->m_LaserUnfreeze.OnPlayerInput(
+				&m_aInputData[g_Config.m_ClDummy],
+				&m_aLastData[g_Config.m_ClDummy]);
 
 		// Avoid and Laser Unfreeze are evaluated in CGameClient after this
 		// base input has been assembled. Force a tick-rate packet while either is

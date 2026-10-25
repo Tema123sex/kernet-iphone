@@ -15,7 +15,6 @@
 #include <game/client/prediction/entities/character.h>
 #include <game/client/prediction/gameworld.h>
 
-static void LU_Log(const char *pMsg) { (void)pMsg; }
 
 static const float LU_TEE_RADIUS = 28.0f;
 
@@ -50,6 +49,7 @@ void CLaserUnfreeze::OnReset()
 	m_FireExtra = 0;
 	m_Claimed = false;
 	m_FakeAngleSending = false;
+	m_WeaponForced = false;
 	m_PlanTx = 0;
 	m_PlanTy = 0;
 	m_PlanFreezeIdx = -1;
@@ -125,26 +125,26 @@ int CLaserUnfreeze::SweepFreeze(vec2 Prev, vec2 Cur) const
 int CLaserUnfreeze::PredictWorld(vec2 *pSelf, int *pFreeze, vec2 *pOther, bool *pOn, int Max, int Window, int OtherSim, bool *pDeep) const
 {
 	*pDeep = false;
-	LU_Log("PredictWorld: entry");
 	const int LocalId = GameClient()->m_Snap.m_LocalClientId;
 	if(LocalId < 0 || LocalId >= MAX_CLIENTS)
 	{
-		LU_Log("PredictWorld: LocalId out of range");
 		return -1;
 	}
 	if(!GameClient()->m_PredictedWorld.GetCharacterById(LocalId))
 	{
-		LU_Log("PredictWorld: no char in PredictedWorld");
 		return -1;
 	}
 
 	CGameWorld SimWorld;
-	SimWorld.CopyWorld(&GameClient()->m_PredictedWorld);
-	LU_Log("PredictWorld: CopyWorld ok");
+	// CopyWorld links parent/child entities of the live world and
+	// leaves dangling pointers after this function returns.
+	SimWorld.CopyWorldClean(&GameClient()->m_PredictedWorld);
+	SimWorld.m_WorldConfig.m_PredictDDRace = true;
+	SimWorld.m_WorldConfig.m_PredictTiles = true;
+	SimWorld.m_WorldConfig.m_PredictFreeze = 1;
 	CCharacter *pSelfChar = SimWorld.GetCharacterById(LocalId);
 	if(!pSelfChar)
 	{
-		LU_Log("PredictWorld: no char in SimWorld");
 		return -1;
 	}
 
@@ -176,9 +176,7 @@ int CLaserUnfreeze::PredictWorld(vec2 *pSelf, int *pFreeze, vec2 *pOther, bool *
 		pSelfChar->OnDirectInput(&In);
 		SimWorld.m_GameTick++;
 		pSelfChar->OnPredictedInput(&In);
-		LU_Log("PredictWorld: before Tick");
 		SimWorld.Tick();
-		LU_Log("PredictWorld: after Tick");
 
 		pSelfChar = SimWorld.GetCharacterById(LocalId);
 		if(!pSelfChar)
@@ -263,7 +261,6 @@ bool CLaserUnfreeze::Sticks(const int *pFreeze, int TrajLen, int From) const
 
 bool CLaserUnfreeze::TraceSelfShot(vec2 Dir, const SPlan &Plan, int *pOutHitIdx, float *pOutMiss, int MaxUsefulIdx) const
 {
-	LU_Log("TraceSelfShot: entry");
 	if(length(Dir) < 0.001f)
 		return false;
 	if(!Collision() || Collision()->GetWidth() <= 0)
@@ -378,11 +375,9 @@ bool CLaserUnfreeze::QuantizeDir(vec2 Dir, int *pTx, int *pTy, vec2 *pUnit) cons
 
 void CLaserUnfreeze::Fire(CNetObj_PlayerInput *pOut, CNetObj_PlayerInput *pPersistent, int Tx, int Ty, int PredTick)
 {
-	LU_Log("Fire: entry");
 	if(Tx == 0 && Ty == 0)
 		return;
 
-	pOut->m_WantedWeapon = WEAPON_LASER + 1;
 	pOut->m_TargetX = Tx;
 	pOut->m_TargetY = Ty;
 	m_Claimed = true;
@@ -390,13 +385,16 @@ void CLaserUnfreeze::Fire(CNetObj_PlayerInput *pOut, CNetObj_PlayerInput *pPersi
 	if(!GameClient()->m_Snap.m_pLocalCharacter)
 		return;
 	if(GameClient()->m_PredictedChar.m_ActiveWeapon != WEAPON_LASER)
+	{
+		// Switch first, the shot follows on a later input tick.
+		pOut->m_WantedWeapon = WEAPON_LASER + 1;
+		m_WeaponForced = true;
 		return;
+	}
 
-	m_FireExtra += 2;
-	if(pPersistent)
-		pOut->m_Fire = (pPersistent->m_Fire + m_FireExtra) & INPUT_STATE_MASK;
-	else
-		pOut->m_Fire = (pOut->m_Fire + 2) & INPUT_STATE_MASK;
+	// One extra press+release relative to the current counter.
+	(void)pPersistent;
+	pOut->m_Fire = (pOut->m_Fire + 2) & INPUT_STATE_MASK;
 	m_LastFireTick = PredTick;
 	m_LastFireTx = Tx;
 	m_LastFireTy = Ty;
@@ -433,7 +431,6 @@ bool CLaserUnfreeze::HoldTurn(CNetObj_PlayerInput *pOut, int PredTick)
 
 void CLaserUnfreeze::OnRender()
 {
-	LU_Log("OnRender: entry");
 	if(g_Config.m_ClZzAutoUnfreezeSilent)
 		return;
 	if(Client()->State() != IClient::STATE_ONLINE && Client()->State() != IClient::STATE_DEMOPLAYBACK)
@@ -450,6 +447,17 @@ void CLaserUnfreeze::OnPlayerInput(CNetObj_PlayerInput *pOut, CNetObj_PlayerInpu
 {
 	m_Claimed = false;
 	m_FakeAngleSending = false;
+
+	// Drop the forced weapon request once laser is active, else the
+	// server keeps re-selecting laser.
+	if(m_WeaponForced && GameClient()->m_Snap.m_pLocalCharacter &&
+		GameClient()->m_PredictedChar.m_ActiveWeapon == WEAPON_LASER)
+	{
+		if(pOut->m_WantedWeapon == WEAPON_LASER + 1)
+			pOut->m_WantedWeapon = 0;
+		m_WeaponForced = false;
+	}
+
 	if(!IsActive())
 		return;
 

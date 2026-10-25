@@ -74,6 +74,7 @@ private:
 	int m_FireExtra = 0;
 
 	bool m_FakeAngleSending = false;
+	bool m_WeaponForced = false;
 	float m_FakeAngle = 0.0f;
 
 	int m_PlanTx = 0;
