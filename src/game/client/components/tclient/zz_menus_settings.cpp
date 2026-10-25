@@ -511,23 +511,40 @@ void CMenus::RenderSettingsKernelNet(CUIRect MainView)
 		}
         // Zz: Восстановленные блоки
         {
-                CUIRect Inner;
-                DoFeaturePanel(LeftView, 180.0f, Localize("Laser Unfreeze"), Inner);
+                CUIRect Inner, LuLabel, LuRow;
+                DoFeaturePanel(LeftView, 200.0f, Localize("Лазерный анфриз"), Inner);
+                Inner.HSplitTop(LineSize, &LuLabel, &Inner);
+                Ui()->DoLabel(&LuLabel,
+                        Localize("Автоматически ищет безопасный рикошет лазера"),
+                        14.0f, TEXTALIGN_ML);
+                Inner.HSplitTop(5.0f, nullptr, &Inner);
                 DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoUnfreeze, Localize("Auto-unfreeze"),
+                        &g_Config.m_ClZzAutoUnfreeze, Localize("Включить"),
                         &g_Config.m_ClZzAutoUnfreeze, &Inner, LineSize);
                 DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoUnfreezeAutoLaser, Localize("Auto laser"),
-                        &g_Config.m_ClZzAutoUnfreezeAutoLaser, &Inner, LineSize);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzAutoUnfreezeFov,
-                        &g_Config.m_ClZzAutoUnfreezeFov, &Button, Localize("FOV"), 5, 360);
-                Inner.HSplitTop(LineSize, &Button, &Inner);
-                Ui()->DoScrollbarOption(&g_Config.m_ClZzAutoUnfreezeAngles,
-                        &g_Config.m_ClZzAutoUnfreezeAngles, &Button, Localize("Angles"), 1, 144);
-                DoButton_CheckBoxAutoVMarginAndSet(
-                        &g_Config.m_ClZzAutoUnfreezeSilent, Localize("Silent"),
+                        &g_Config.m_ClZzAutoUnfreezeSilent, Localize("Тихий прицел"),
                         &g_Config.m_ClZzAutoUnfreezeSilent, &Inner, LineSize);
+                DoButton_CheckBoxAutoVMarginAndSet(
+                        &g_Config.m_ClZzAutoUnfreezeMostBounces,
+                        Localize("Предпочитать больше отскоков"),
+                        &g_Config.m_ClZzAutoUnfreezeMostBounces, &Inner, LineSize);
+                Inner.HSplitTop(LineSize, &LuRow, &Inner);
+                Ui()->DoScrollbarOption(&g_Config.m_ClZzAutoUnfreezeFov,
+                        &g_Config.m_ClZzAutoUnfreezeFov, &LuRow,
+                        Localize("Угол обзора"), 5, 360,
+                        &CUi::ms_LinearScrollbarScale, 0u, " °");
+                Inner.HSplitTop(LineSize, &LuRow, &Inner);
+                Ui()->DoScrollbarOption(&g_Config.m_ClZzAutoUnfreezeTicks,
+                        &g_Config.m_ClZzAutoUnfreezeTicks, &LuRow,
+                        Localize("Предсказание"), 8, 120);
+                Inner.HSplitTop(LineSize, &LuRow, &Inner);
+                Ui()->DoScrollbarOption(&g_Config.m_ClZzAutoUnfreezeDirTicks,
+                        &g_Config.m_ClZzAutoUnfreezeDirTicks, &LuRow,
+                        Localize("Окно обнаружения"), 1, 40);
+                Inner.HSplitTop(LineSize, &LuRow, &Inner);
+                Ui()->DoScrollbarOption(&g_Config.m_ClZzAutoUnfreezeMaxPoints,
+                        &g_Config.m_ClZzAutoUnfreezeMaxPoints, &LuRow,
+                        Localize("Отскоки"), 1, 10);
         }
 
         {

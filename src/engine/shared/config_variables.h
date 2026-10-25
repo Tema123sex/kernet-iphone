@@ -967,7 +967,7 @@ MACRO_CONFIG_INT(ClZzAutoUnfreezeFov, cl_zz_auto_unfreeze_fov, 90, 5, 360,
 MACRO_CONFIG_INT(ClZzAutoUnfreezeAngles, cl_zz_auto_unfreeze_angles, 9, 1, 144,
 	CFGFLAG_CLIENT | CFGFLAG_SAVE,
 	"Laser unfreeze number of raycast angles")
-MACRO_CONFIG_INT(ClZzAutoUnfreezeTicks, cl_zz_auto_unfreeze_ticks, 10, 1, 50,
+MACRO_CONFIG_INT(ClZzAutoUnfreezeTicks, cl_zz_auto_unfreeze_ticks, 73, 8, 120,
 	CFGFLAG_CLIENT | CFGFLAG_SAVE,
 	"Laser unfreeze simulation ticks")
 MACRO_CONFIG_INT(ClZzAutoUnfreezeTriggerTicks,
