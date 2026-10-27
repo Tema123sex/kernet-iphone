@@ -23,8 +23,8 @@ jobs:
 
       - name: Fix script line endings (CRLF to LF)
         run: |
-          # Эта команда лечит ошибку /bin/bash^M
-          find ./scripts -type f -name "*.sh" -exec dos2unix {} +
+          # Замена dos2unix на sed
+          find ./scripts -type f -name "*.sh" -exec sed -i '' -e 's/\r$//' {} \;
           chmod -R +x ./scripts/
 
       - name: Build ddnet-libs for iOS
@@ -38,7 +38,6 @@ jobs:
       - name: Build kataris for iOS
         run: |
           rm -rf build-ios-client
-          # Добавил -DSTEAM=OFF, чтобы избежать проблем с линковкой Steam на iOS
           ./scripts/ios/cmake_ios.sh device kataris com.kataris.app Release build-ios-client -DSTEAM=OFF
           echo "=== Ищем собранный .app ==="
           find build-ios-client -name "*.app" -type d
