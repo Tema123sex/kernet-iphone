@@ -12,33 +12,56 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install build tools and iOS libraries via Homebrew
+      - name: Install build tools
         run: |
-          brew install autoconf automake cmake libtool m4 ninja pkg-config
-          # Устанавливаем недостающие библиотеки под macOS
-          brew install sdl2 opus opusfile libogg freetype libpng sqlite
+          brew install autoconf automake cmake libtool m4 ninja pkg-config wget
 
       - name: Add Rust iOS targets
         run: |
           rustup target add aarch64-apple-ios
           rustup target add aarch64-apple-ios-sim
 
-      - name: Fix script line endings (CRLF to LF)
+      - name: Build SDL2 for iOS
         run: |
-          find ./scripts -type f -name "*.sh" -exec sed -i '' -e 's/\r$//' {} \;
-          chmod -R +x ./scripts/
+          wget https://github.com/libsdl-org/SDL/releases/download/release-2.30.0/SDL2-2.30.0.tar.gz
+          tar -xzf SDL2-2.30.0.tar.gz
+          cd SDL2-2.30.0
+          mkdir build-ios && cd build-ios
+          cmake .. -G Xcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=arm64 -DSDL_TEST=OFF -DSDL_SHARED=ON -DSDL_STATIC=OFF -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/build-ios-libs
+          xcodebuild -project SDL2.xcodeproj -scheme SDL2 -configuration Release -sdk iphoneos archive CODE_SIGNING_ALLOWED=NO
+          cp -r SDL2.xcarchive/Products/Library/Frameworks/SDL2.framework ${{ github.workspace }}/build-ios-libs/
 
-      - name: Configure CMake for iOS (Direct)
+      - name: Build Opus and Opusfile for iOS
+        run: |
+          # Собираем Opus
+          wget https://downloads.xiph.org/releases/opus/opus-1.4.tar.gz
+          tar -xzf opus-1.4.tar.gz
+          cd opus-1.4
+          ./configure --host=aarch64-apple-darwin --prefix=${{ github.workspace }}/build-ios-libs
+          make -j$(sysctl -n hw.ncpu)
+          make install
+          cd ..
+          
+          # Собираем Opusfile
+          wget https://downloads.xiph.org/releases/opusfile/opusfile-0.12.tar.gz
+          tar -xzf opusfile-0.12.tar.gz
+          cd opusfile-0.12
+          ./configure --host=aarch64-apple-darwin --prefix=${{ github.workspace }}/build-ios-libs --disable-http --disable-examples --disable-doc
+          make -j$(sysctl -n hw.ncpu)
+          make install
+          cd ..
+
+      - name: Configure CMake for iOS
         run: |
           mkdir build-ios
           cd build-ios
-          # Передаем CMake пути к библиотекам из Homebrew
+          # Указываем CMake, где лежат наши собранные библиотеки
           cmake .. -G Xcode \
             -DCMAKE_SYSTEM_NAME=iOS \
             -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 \
             -DVULKAN=OFF \
             -DSTEAM=OFF \
-            -DCMAKE_PREFIX_PATH="$(brew --prefix sdl2);$(brew --prefix opus);$(brew --prefix opusfile);$(brew --prefix libogg);$(brew --prefix freetype);$(brew --prefix libpng);$(brew --prefix sqlite)" \
+            -DCMAKE_PREFIX_PATH="${{ github.workspace }}/build-ios-libs" \
             -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO \
             -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO
 
