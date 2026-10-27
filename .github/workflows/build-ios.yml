@@ -23,12 +23,16 @@ jobs:
 
       - name: Fix script line endings (CRLF to LF)
         run: |
-          # Замена dos2unix на sed
           find ./scripts -type f -name "*.sh" -exec sed -i '' -e 's/\r$//' {} \;
           chmod -R +x ./scripts/
 
       - name: Build ddnet-libs for iOS
         run: |
+          # Создаем фейковую nproc для macOS
+          echo '#!/bin/bash' > /usr/local/bin/nproc
+          echo 'sysctl -n hw.ncpu' >> /usr/local/bin/nproc
+          chmod +x /usr/local/bin/nproc
+          
           export M4="$(brew --prefix m4)/bin/m4"
           mkdir -p build-ios-libs
           ./scripts/compile_libs/gen_libs.sh build-ios-libs ios
