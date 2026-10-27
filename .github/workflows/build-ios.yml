@@ -43,11 +43,19 @@ jobs:
           
           xcodebuild -project SDL2.xcodeproj -scheme SDL2 -configuration Release -sdk iphoneos archive CODE_SIGNING_ALLOWED=NO
           
-          # Ищем SDL2.framework в папке сборки и копируем
           find . -name "SDL2.framework" -type d -exec cp -r {} ${{ github.workspace }}/build-ios-libs/Frameworks/ \; -quit
 
       - name: Build Opus and Opusfile for iOS
         run: |
+          # Собираем libogg (нужен для opusfile)
+          wget https://downloads.xiph.org/releases/ogg/libogg-1.3.5.tar.gz
+          tar -xzf libogg-1.3.5.tar.gz
+          cd libogg-1.3.5
+          ./configure --host=aarch64-apple-darwin --prefix=${{ github.workspace }}/build-ios-libs
+          make -j$(sysctl -n hw.ncpu)
+          make install
+          cd ..
+
           # Собираем Opus
           wget https://downloads.xiph.org/releases/opus/opus-1.4.tar.gz
           tar -xzf opus-1.4.tar.gz
@@ -57,13 +65,15 @@ jobs:
           make install
           cd ..
           
-          # Собираем Opusfile (скачиваем напрямую с GitHub, чтобы не было 404)
+          # Собираем Opusfile с указанием пути к pkg-config
           wget https://github.com/xiph/opusfile/archive/refs/tags/v0.12.tar.gz -O opusfile-0.12.tar.gz
           tar -xzf opusfile-0.12.tar.gz
           cd opusfile-0.12
           
-          # Генерируем configure (так как в архиве с GitHub его нет)
           ./autogen.sh
+          
+          # ПОДСКАЗЫВАЕМ PKG-CONFIG, ГДЕ ЛЕЖАТ БИБЛИОТЕКИ
+          export PKG_CONFIG_PATH=${{ github.workspace }}/build-ios-libs/lib/pkgconfig:$PKG_CONFIG_PATH
           
           ./configure --host=aarch64-apple-darwin --prefix=${{ github.workspace }}/build-ios-libs --disable-http --disable-examples --disable-doc
           make -j$(sysctl -n hw.ncpu)
