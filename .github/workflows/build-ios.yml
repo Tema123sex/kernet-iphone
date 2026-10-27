@@ -12,9 +12,11 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install build tools
+      - name: Install build tools and iOS libraries via Homebrew
         run: |
           brew install autoconf automake cmake libtool m4 ninja pkg-config
+          # Устанавливаем недостающие библиотеки под macOS
+          brew install sdl2 opus opusfile libogg freetype libpng sqlite
 
       - name: Add Rust iOS targets
         run: |
@@ -30,19 +32,19 @@ jobs:
         run: |
           mkdir build-ios
           cd build-ios
-          # Прямая генерация Xcode проекта без скриптов
+          # Передаем CMake пути к библиотекам из Homebrew
           cmake .. -G Xcode \
             -DCMAKE_SYSTEM_NAME=iOS \
             -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 \
             -DVULKAN=OFF \
             -DSTEAM=OFF \
+            -DCMAKE_PREFIX_PATH="$(brew --prefix sdl2);$(brew --prefix opus);$(brew --prefix opusfile);$(brew --prefix libogg);$(brew --prefix freetype);$(brew --prefix libpng);$(brew --prefix sqlite)" \
             -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO \
             -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO
 
       - name: Build with Xcode
         run: |
           cd build-ios
-          # Ищем сгенерированный проект. Скорее всего, он называется kataris.xcodeproj
           xcodebuild -project kataris.xcodeproj \
             -scheme kataris \
             -configuration Release \
@@ -55,7 +57,6 @@ jobs:
         run: |
           cd build-ios/build
           mkdir Payload
-          # Ищем .app файл в архиве
           find . -name "*.app" -type d -exec cp -r {} Payload/ \;
           zip -r kataris.ipa Payload
 
