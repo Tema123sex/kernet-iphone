@@ -1,58 +1,84 @@
-name: Build iOS
+name: Build iOS IPA
 
 on:
-  push:
-    branches: [ main ]
-  workflow_dispatch: # Позволяет запускать сборку вручную
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: macos-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
-    - name: Install dependencies
-      run: |
-        # Добавили установку opus, opusfile и sdl2
-        brew install cmake ninja rust opus opusfile sdl2 pkg-config
+      - name: Install build tools
+        run: |
+          brew install autoconf automake cmake libtool m4 ninja pkg-config
 
-    - name: Configure CMake
-      run: |
-        mkdir build-ios
-        cd build-ios
-        # Добавили пути, чтобы CMake точно нашел библиотеки, установленные через brew
-        cmake .. -G Xcode \
-          -DCMAKE_SYSTEM_NAME=iOS \
-          -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 \
-          -DVULKAN=OFF \
-          -DCMAKE_PREFIX_PATH="$(brew --prefix opus);$(brew --prefix opusfile);$(brew --prefix sdl2)" \
-          -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO \
-          -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO
+      - name: Add Rust iOS targets
+        run: |
+          rustup target add aarch64-apple-ios
+          rustup target add aarch64-apple-ios-sim
 
-    - name: Build with Xcode
-      run: |
-        cd build-ios
-        xcodebuild -project kataris.xcodeproj \
-          -scheme kataris \
-          -configuration Release \
-          -sdk iphoneos \
-          -archivePath $PWD/build/kataris.xcarchive \
-          archive \
-          CODE_SIGNING_ALLOWED=NO
+      - name: Build ddnet-libs for iOS
+        run: |
+          chmod -R +x ./scripts/
+          export M4="$(brew --prefix m4)/bin/m4"
+          mkdir -p build-ios-libs
+          ./scripts/compile_libs/gen_libs.sh build-ios-libs ios
+          find build-ios-libs -type d -name ios -exec rm -rf {} + -prune
+          cp -r build-ios-libs/ddnet-libs/. ddnet-libs/
 
-    - name: Package IPA
-      run: |
-        cd build-ios/build
-        mkdir Payload
-        cp -r kataris.xcarchive/Products/Applications/*.app Payload/
-        zip -r kataris.ipa Payload
+      - name: Build BestClient for iOS
+        run: |
+          rm -rf build-ios-client
+          ./scripts/ios/cmake_ios.sh device BestClient org.bestclient.app Release build-ios-client
+          echo "=== Ищем собранный .app ==="
+          find build-ios-client -name "*.app" -type d
 
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: kataris-ios-ipa
-        path: build-ios/build/kataris.ipa
+      - name: Verify no libsteam_api link
+        run: |
+          APP_PATH=$(find build-ios-client -name "BestClient.app" -type d | head -n 1)
+          if [ -z "$APP_PATH" ]; then
+            echo "BestClient.app не найден!"
+            exit 1
+          fi
+          echo "=== Проверка зависимостей бинарника ==="
+          otool -L "$APP_PATH/BestClient" || true
+          echo "=== Проверка Frameworks ==="
+          ls -la "$APP_PATH/Frameworks/" || echo "Frameworks пусто — это хорошо"
+          if otool -L "$APP_PATH/BestClient" | grep -q "libsteam_api"; then
+            echo "ВНИМАНИЕ: бинарник всё ещё ссылается на libsteam_api.dylib!"
+            echo "Проверь, что -DSTEAM=OFF прописан в scripts/ios/cmake_ios.sh"
+            exit 1
+          fi
+          echo "OK: libsteam_api.dylib не линкуется"
+
+      - name: Package IPA with ad-hoc signing
+        run: |
+          APP_PATH=$(find . -name "BestClient.app" -type d | head -n 1)
+          if [ -z "$APP_PATH" ]; then
+            echo "BestClient.app не найден, ищем любой .app..."
+            APP_PATH=$(find . -name "*.app" -type d | head -n 1)
+          fi
+          if [ -z "$APP_PATH" ]; then
+            echo "Не найден ни один .app!"
+            find . -name "*.app" -type d
+            exit 1
+          fi
+          echo "Найден: $APP_PATH"
+          mkdir -p Payload
+          cp -r "$APP_PATH" Payload/
+          echo "=== Ad-hoc подпись ==="
+          codesign --force --deep --sign - "Payload/BestClient.app"
+          echo "=== Создание IPA ==="
+          zip -r BestClient.ipa Payload
+          echo "=== Структура IPA ==="
+          unzip -l BestClient.ipa | head -20
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: BestClient-iOS-IPA
+          path: BestClient.ipa
