@@ -13,7 +13,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        submodules: recursive # Важно для ddnet-libs и других сабмодулей
+        submodules: recursive
 
     - name: Install dependencies
       run: |
@@ -23,18 +23,17 @@ jobs:
       run: |
         mkdir build-ios
         cd build-ios
-        # Генерируем проект Xcode без подписи
+        # Добавлен флаг -DVULKAN=OFF, чтобы обойти ошибку glslangValidator
         cmake .. -G Xcode \
           -DCMAKE_SYSTEM_NAME=iOS \
           -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 \
+          -DVULKAN=OFF \
           -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO \
           -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO
 
     - name: Build with Xcode
       run: |
         cd build-ios
-        # Собираем проект. Имя схемы (scheme) обычно совпадает с названием проекта (kataris или TClient)
-        # Если сборка упадет с ошибкой "scheme not found", посмотри в Xcode как называется схема, или напиши мне.
         xcodebuild -project kataris.xcodeproj \
           -scheme kataris \
           -configuration Release \
@@ -47,9 +46,7 @@ jobs:
       run: |
         cd build-ios/build
         mkdir Payload
-        # Копируем собранное приложение в папку Payload (стандарт для IPA)
         cp -r kataris.xcarchive/Products/Applications/*.app Payload/
-        # Упаковываем в zip и переименовываем в ipa
         zip -r kataris.ipa Payload
 
     - name: Upload Artifact
