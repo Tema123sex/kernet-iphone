@@ -21,25 +21,13 @@ jobs:
           rustup target add aarch64-apple-ios
           rustup target add aarch64-apple-ios-sim
 
-      - name: Build SDL2 for iOS
+      - name: Download SDL2 for iOS
         run: |
-          mkdir -p ${{ github.workspace }}/build-ios-libs
           mkdir -p ${{ github.workspace }}/build-ios-libs/Frameworks
-          
-          wget https://github.com/libsdl-org/SDL/releases/download/release-2.30.0/SDL2-2.30.0.tar.gz
-          tar -xzf SDL2-2.30.0.tar.gz
-          cd SDL2-2.30.0
-          
-          # ИСПРАВЛЕНИЕ: Схема называется "SDL", а не "SDL2"
-          xcodebuild -project Xcode/SDL/SDL.xcodeproj \
-            -scheme SDL \
-            -configuration Release \
-            -sdk iphoneos \
-            -archivePath ${{ github.workspace }}/build-ios-libs/SDL2.xcarchive \
-            archive \
-            CODE_SIGNING_ALLOWED=NO
-            
-          cp -r ${{ github.workspace }}/build-ios-libs/SDL2.xcarchive/Products/Library/Frameworks/SDL2.framework ${{ github.workspace }}/build-ios-libs/Frameworks/
+          # Скачиваем готовый SDL2.framework для iOS
+          wget https://github.com/libsdl-org/SDL/releases/download/release-2.30.0/SDL2-2.30.0-iOS.tar.gz
+          tar -xzf SDL2-2.30.0-iOS.tar.gz
+          mv SDL2.framework ${{ github.workspace }}/build-ios-libs/Frameworks/
 
       - name: Build Opus and Opusfile for iOS
         run: |
@@ -70,7 +58,7 @@ jobs:
             -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 \
             -DVULKAN=OFF \
             -DSTEAM=OFF \
-            -DCMAKE_PREFIX_PATH="${{ github.workspace }}/build-ios-libs" \
+            -DCMAKE_PREFIX_PATH="${{ github.workspace }}/build-ios-libs;${{ github.workspace }}/build-ios-libs/Frameworks" \
             -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO \
             -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO
 
