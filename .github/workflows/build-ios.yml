@@ -17,17 +17,19 @@ jobs:
 
     - name: Install dependencies
       run: |
-        brew install cmake ninja rust
+        # Добавили установку opus, opusfile и sdl2
+        brew install cmake ninja rust opus opusfile sdl2 pkg-config
 
     - name: Configure CMake
       run: |
         mkdir build-ios
         cd build-ios
-        # Добавлен флаг -DVULKAN=OFF, чтобы обойти ошибку glslangValidator
+        # Добавили пути, чтобы CMake точно нашел библиотеки, установленные через brew
         cmake .. -G Xcode \
           -DCMAKE_SYSTEM_NAME=iOS \
           -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 \
           -DVULKAN=OFF \
+          -DCMAKE_PREFIX_PATH="$(brew --prefix opus);$(brew --prefix opusfile);$(brew --prefix sdl2)" \
           -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO \
           -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO
 
