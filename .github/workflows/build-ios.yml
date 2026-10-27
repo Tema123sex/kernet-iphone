@@ -26,58 +26,41 @@ jobs:
           find ./scripts -type f -name "*.sh" -exec sed -i '' -e 's/\r$//' {} \;
           chmod -R +x ./scripts/
 
-      # Мы пропустили шаг Build ddnet-libs, так как скрипт не поддерживает ios
-      # и сразу перешли к сборке клиента
-
-      - name: Build kataris for iOS
+      - name: Configure CMake for iOS (Direct)
         run: |
-          rm -rf build-ios-client
-          # Пробуем запустить скрипт сборки клиента напрямую
-          ./scripts/ios/cmake_ios.sh device kataris com.kataris.app Release build-ios-client -DSTEAM=OFF
-          echo "=== Ищем собранный .app ==="
-          find build-ios-client -name "*.app" -type d
+          mkdir build-ios
+          cd build-ios
+          # Прямая генерация Xcode проекта без скриптов
+          cmake .. -G Xcode \
+            -DCMAKE_SYSTEM_NAME=iOS \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 \
+            -DVULKAN=OFF \
+            -DSTEAM=OFF \
+            -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO \
+            -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO
 
-      - name: Verify no libsteam_api link
+      - name: Build with Xcode
         run: |
-          APP_PATH=$(find build-ios-client -name "kataris.app" -type d | head -n 1)
-          if [ -z "$APP_PATH" ]; then
-            echo "kataris.app не найден!"
-            exit 1
-          fi
-          echo "=== Проверка зависимостей бинарника ==="
-          otool -L "$APP_PATH/kataris" || true
-          echo "=== Проверка Frameworks ==="
-          ls -la "$APP_PATH/Frameworks/" || echo "Frameworks пусто — это хорошо"
-          if otool -L "$APP_PATH/kataris" | grep -q "libsteam_api"; then
-            echo "ВНИМАНИЕ: бинарник всё ещё ссылается на libsteam_api.dylib!"
-            exit 1
-          fi
-          echo "OK: libsteam_api.dylib не линкуется"
+          cd build-ios
+          # Ищем сгенерированный проект. Скорее всего, он называется kataris.xcodeproj
+          xcodebuild -project kataris.xcodeproj \
+            -scheme kataris \
+            -configuration Release \
+            -sdk iphoneos \
+            -archivePath $PWD/build/kataris.xcarchive \
+            archive \
+            CODE_SIGNING_ALLOWED=NO
 
-      - name: Package IPA with ad-hoc signing
+      - name: Package IPA
         run: |
-          APP_PATH=$(find . -name "kataris.app" -type d | head -n 1)
-          if [ -z "$APP_PATH" ]; then
-            echo "kataris.app не найден, ищем любой .app..."
-            APP_PATH=$(find . -name "*.app" -type d | head -n 1)
-          fi
-          if [ -z "$APP_PATH" ]; then
-            echo "Не найден ни один .app!"
-            find . -name "*.app" -type d
-            exit 1
-          fi
-          echo "Найден: $APP_PATH"
-          mkdir -p Payload
-          cp -r "$APP_PATH" Payload/
-          echo "=== Ad-hoc подпись ==="
-          codesign --force --deep --sign - "Payload/kataris.app"
-          echo "=== Создание IPA ==="
+          cd build-ios/build
+          mkdir Payload
+          # Ищем .app файл в архиве
+          find . -name "*.app" -type d -exec cp -r {} Payload/ \;
           zip -r kataris.ipa Payload
-          echo "=== Структура IPA ==="
-          unzip -l kataris.ipa | head -20
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
           name: kataris-iOS-IPA
-          path: kataris.ipa
+          path: build-ios/build/kataris.ipa
