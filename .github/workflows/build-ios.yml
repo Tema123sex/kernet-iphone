@@ -30,25 +30,26 @@ jobs:
           find build-ios-libs -type d -name ios -exec rm -rf {} + -prune
           cp -r build-ios-libs/ddnet-libs/. ddnet-libs/
 
-      - name: Build BestClient for iOS
+      - name: Build kataris for iOS
         run: |
           rm -rf build-ios-client
-          ./scripts/ios/cmake_ios.sh device BestClient org.bestclient.app Release build-ios-client
+          # Тут важно: проверь, как называется скрипт. Если это TClient, то замени kataris на TClient
+          ./scripts/ios/cmake_ios.sh device kataris com.kataris.app Release build-ios-client
           echo "=== Ищем собранный .app ==="
           find build-ios-client -name "*.app" -type d
 
       - name: Verify no libsteam_api link
         run: |
-          APP_PATH=$(find build-ios-client -name "BestClient.app" -type d | head -n 1)
+          APP_PATH=$(find build-ios-client -name "kataris.app" -type d | head -n 1)
           if [ -z "$APP_PATH" ]; then
-            echo "BestClient.app не найден!"
+            echo "kataris.app не найден!"
             exit 1
           fi
           echo "=== Проверка зависимостей бинарника ==="
-          otool -L "$APP_PATH/BestClient" || true
+          otool -L "$APP_PATH/kataris" || true
           echo "=== Проверка Frameworks ==="
           ls -la "$APP_PATH/Frameworks/" || echo "Frameworks пусто — это хорошо"
-          if otool -L "$APP_PATH/BestClient" | grep -q "libsteam_api"; then
+          if otool -L "$APP_PATH/kataris" | grep -q "libsteam_api"; then
             echo "ВНИМАНИЕ: бинарник всё ещё ссылается на libsteam_api.dylib!"
             echo "Проверь, что -DSTEAM=OFF прописан в scripts/ios/cmake_ios.sh"
             exit 1
@@ -57,9 +58,9 @@ jobs:
 
       - name: Package IPA with ad-hoc signing
         run: |
-          APP_PATH=$(find . -name "BestClient.app" -type d | head -n 1)
+          APP_PATH=$(find . -name "kataris.app" -type d | head -n 1)
           if [ -z "$APP_PATH" ]; then
-            echo "BestClient.app не найден, ищем любой .app..."
+            echo "kataris.app не найден, ищем любой .app..."
             APP_PATH=$(find . -name "*.app" -type d | head -n 1)
           fi
           if [ -z "$APP_PATH" ]; then
@@ -71,14 +72,14 @@ jobs:
           mkdir -p Payload
           cp -r "$APP_PATH" Payload/
           echo "=== Ad-hoc подпись ==="
-          codesign --force --deep --sign - "Payload/BestClient.app"
+          codesign --force --deep --sign - "Payload/kataris.app"
           echo "=== Создание IPA ==="
-          zip -r BestClient.ipa Payload
+          zip -r kataris.ipa Payload
           echo "=== Структура IPA ==="
-          unzip -l BestClient.ipa | head -20
+          unzip -l kataris.ipa | head -20
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
-          name: BestClient-iOS-IPA
-          path: BestClient.ipa
+          name: kataris-iOS-IPA
+          path: kataris.ipa
