@@ -30,16 +30,15 @@ jobs:
           tar -xzf SDL2-2.30.0.tar.gz
           cd SDL2-2.30.0
           
-          # Указываем, куда сохранить архив
+          # ИСПРАВЛЕНИЕ: Схема называется "SDL", а не "SDL2"
           xcodebuild -project Xcode/SDL/SDL.xcodeproj \
-            -scheme SDL2 \
+            -scheme SDL \
             -configuration Release \
             -sdk iphoneos \
             -archivePath ${{ github.workspace }}/build-ios-libs/SDL2.xcarchive \
             archive \
             CODE_SIGNING_ALLOWED=NO
             
-          # Копируем фреймворк из архива в нашу папку
           cp -r ${{ github.workspace }}/build-ios-libs/SDL2.xcarchive/Products/Library/Frameworks/SDL2.framework ${{ github.workspace }}/build-ios-libs/Frameworks/
 
       - name: Build Opus and Opusfile for iOS
