@@ -23,13 +23,24 @@ jobs:
 
       - name: Build SDL2 for iOS
         run: |
+          mkdir -p ${{ github.workspace }}/build-ios-libs
+          mkdir -p ${{ github.workspace }}/build-ios-libs/Frameworks
+          
           wget https://github.com/libsdl-org/SDL/releases/download/release-2.30.0/SDL2-2.30.0.tar.gz
           tar -xzf SDL2-2.30.0.tar.gz
           cd SDL2-2.30.0
-          mkdir build-ios && cd build-ios
-          cmake .. -G Xcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_ARCHITECTURES=arm64 -DSDL_TEST=OFF -DSDL_SHARED=ON -DSDL_STATIC=OFF -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/build-ios-libs
-          xcodebuild -project SDL2.xcodeproj -scheme SDL2 -configuration Release -sdk iphoneos archive CODE_SIGNING_ALLOWED=NO
-          cp -r SDL2.xcarchive/Products/Library/Frameworks/SDL2.framework ${{ github.workspace }}/build-ios-libs/
+          
+          # Указываем, куда сохранить архив
+          xcodebuild -project Xcode/SDL/SDL.xcodeproj \
+            -scheme SDL2 \
+            -configuration Release \
+            -sdk iphoneos \
+            -archivePath ${{ github.workspace }}/build-ios-libs/SDL2.xcarchive \
+            archive \
+            CODE_SIGNING_ALLOWED=NO
+            
+          # Копируем фреймворк из архива в нашу папку
+          cp -r ${{ github.workspace }}/build-ios-libs/SDL2.xcarchive/Products/Library/Frameworks/SDL2.framework ${{ github.workspace }}/build-ios-libs/Frameworks/
 
       - name: Build Opus and Opusfile for iOS
         run: |
@@ -55,7 +66,6 @@ jobs:
         run: |
           mkdir build-ios
           cd build-ios
-          # Указываем CMake, где лежат наши собранные библиотеки
           cmake .. -G Xcode \
             -DCMAKE_SYSTEM_NAME=iOS \
             -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 \
