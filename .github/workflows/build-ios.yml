@@ -26,22 +26,13 @@ jobs:
           find ./scripts -type f -name "*.sh" -exec sed -i '' -e 's/\r$//' {} \;
           chmod -R +x ./scripts/
 
-      - name: Build ddnet-libs for iOS
-        run: |
-          # Создаем фейковую nproc для macOS
-          echo '#!/bin/bash' > /usr/local/bin/nproc
-          echo 'sysctl -n hw.ncpu' >> /usr/local/bin/nproc
-          chmod +x /usr/local/bin/nproc
-          
-          export M4="$(brew --prefix m4)/bin/m4"
-          mkdir -p build-ios-libs
-          ./scripts/compile_libs/gen_libs.sh build-ios-libs ios
-          find build-ios-libs -type d -name ios -exec rm -rf {} + -prune
-          cp -r build-ios-libs/ddnet-libs/. ddnet-libs/
+      # Мы пропустили шаг Build ddnet-libs, так как скрипт не поддерживает ios
+      # и сразу перешли к сборке клиента
 
       - name: Build kataris for iOS
         run: |
           rm -rf build-ios-client
+          # Пробуем запустить скрипт сборки клиента напрямую
           ./scripts/ios/cmake_ios.sh device kataris com.kataris.app Release build-ios-client -DSTEAM=OFF
           echo "=== Ищем собранный .app ==="
           find build-ios-client -name "*.app" -type d
