@@ -21,13 +21,33 @@ jobs:
           rustup target add aarch64-apple-ios
           rustup target add aarch64-apple-ios-sim
 
-      - name: Download SDL2 for iOS
+      - name: Build SDL2 for iOS (via CMake)
         run: |
           mkdir -p ${{ github.workspace }}/build-ios-libs/Frameworks
-          # Скачиваем готовый SDL2.framework для iOS
-          wget https://github.com/libsdl-org/SDL/releases/download/release-2.30.0/SDL2-2.30.0-iOS.tar.gz
-          tar -xzf SDL2-2.30.0-iOS.tar.gz
-          mv SDL2.framework ${{ github.workspace }}/build-ios-libs/Frameworks/
+          
+          # Скачиваем исходники SDL2
+          wget https://github.com/libsdl-org/SDL/releases/download/release-2.30.0/SDL2-2.30.0.tar.gz
+          tar -xzf SDL2-2.30.0.tar.gz
+          cd SDL2-2.30.0
+          
+          # Собираем SDL2 через CMake сразу под iOS
+          mkdir build-ios
+          cd build-ios
+          cmake .. -G Xcode \
+            -DCMAKE_SYSTEM_NAME=iOS \
+            -DCMAKE_OSX_ARCHITECTURES=arm64 \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 \
+            -DSDL_TEST=OFF \
+            -DSDL_SHARED=ON \
+            -DSDL_STATIC=OFF \
+            -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/build-ios-libs \
+            -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO
+          
+          # Собираем и устанавливаем
+          xcodebuild -project SDL2.xcodeproj -scheme SDL2 -configuration Release -sdk iphoneos archive CODE_SIGNING_ALLOWED=NO
+          
+          # Копируем собранный фреймворк
+          cp -r build/Release-iphoneos/SDL2.framework ${{ github.workspace }}/build-ios-libs/Frameworks/
 
       - name: Build Opus and Opusfile for iOS
         run: |
