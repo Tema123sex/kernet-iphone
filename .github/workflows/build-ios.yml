@@ -43,11 +43,12 @@ jobs:
           
           xcodebuild -project SDL2.xcodeproj -scheme SDL2 -configuration Release -sdk iphoneos archive CODE_SIGNING_ALLOWED=NO
           
-          # ХИТРОСТЬ: Ищем SDL2.framework везде, где он мог сохраниться, и копируем первый найденный
+          # Ищем SDL2.framework в папке сборки и копируем
           find . -name "SDL2.framework" -type d -exec cp -r {} ${{ github.workspace }}/build-ios-libs/Frameworks/ \; -quit
 
       - name: Build Opus and Opusfile for iOS
         run: |
+          # Собираем Opus
           wget https://downloads.xiph.org/releases/opus/opus-1.4.tar.gz
           tar -xzf opus-1.4.tar.gz
           cd opus-1.4
@@ -56,9 +57,14 @@ jobs:
           make install
           cd ..
           
-          wget https://downloads.xiph.org/releases/opusfile/opusfile-0.12.tar.gz
+          # Собираем Opusfile (скачиваем напрямую с GitHub, чтобы не было 404)
+          wget https://github.com/xiph/opusfile/archive/refs/tags/v0.12.tar.gz -O opusfile-0.12.tar.gz
           tar -xzf opusfile-0.12.tar.gz
           cd opusfile-0.12
+          
+          # Генерируем configure (так как в архиве с GitHub его нет)
+          ./autogen.sh
+          
           ./configure --host=aarch64-apple-darwin --prefix=${{ github.workspace }}/build-ios-libs --disable-http --disable-examples --disable-doc
           make -j$(sysctl -n hw.ncpu)
           make install
