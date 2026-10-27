@@ -25,12 +25,10 @@ jobs:
         run: |
           mkdir -p ${{ github.workspace }}/build-ios-libs/Frameworks
           
-          # Скачиваем исходники SDL2
           wget https://github.com/libsdl-org/SDL/releases/download/release-2.30.0/SDL2-2.30.0.tar.gz
           tar -xzf SDL2-2.30.0.tar.gz
           cd SDL2-2.30.0
           
-          # Собираем SDL2 через CMake сразу под iOS
           mkdir build-ios
           cd build-ios
           cmake .. -G Xcode \
@@ -43,15 +41,13 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/build-ios-libs \
             -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO
           
-          # Собираем и устанавливаем
           xcodebuild -project SDL2.xcodeproj -scheme SDL2 -configuration Release -sdk iphoneos archive CODE_SIGNING_ALLOWED=NO
           
-          # Копируем собранный фреймворк
-          cp -r build/Release-iphoneos/SDL2.framework ${{ github.workspace }}/build-ios-libs/Frameworks/
+          # ХИТРОСТЬ: Ищем SDL2.framework везде, где он мог сохраниться, и копируем первый найденный
+          find . -name "SDL2.framework" -type d -exec cp -r {} ${{ github.workspace }}/build-ios-libs/Frameworks/ \; -quit
 
       - name: Build Opus and Opusfile for iOS
         run: |
-          # Собираем Opus
           wget https://downloads.xiph.org/releases/opus/opus-1.4.tar.gz
           tar -xzf opus-1.4.tar.gz
           cd opus-1.4
@@ -60,7 +56,6 @@ jobs:
           make install
           cd ..
           
-          # Собираем Opusfile
           wget https://downloads.xiph.org/releases/opusfile/opusfile-0.12.tar.gz
           tar -xzf opusfile-0.12.tar.gz
           cd opusfile-0.12
