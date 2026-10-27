@@ -624,6 +624,12 @@ MACRO_CONFIG_INT(ClZzClickGuiMod, cl_zz_click_gui_mod, 0, 0, 15,
 MACRO_CONFIG_INT(ClZzClickGuiKeyOnly, cl_zz_click_gui_key_only, 1, 0, 1,
 	CFGFLAG_CLIENT | CFGFLAG_SAVE | CFGFLAG_HIDDEN,
 	"Open KernelNet click GUI only with its direct key, without an ordinary bind")
+MACRO_CONFIG_INT(ClZzNewYearMenu, cl_zz_newyear_menu, 0, 0, 1, CFGFLAG_CLIENT,
+	"Show the New Year menu")
+MACRO_CONFIG_INT(ClZzNewYearMenuKey, cl_zz_newyear_menu_key, 64, 0, 512,
+	CFGFLAG_CLIENT | CFGFLAG_SAVE, "New Year menu key (default F7)")
+MACRO_CONFIG_INT(ClZzNewYearMenuDecor, cl_zz_newyear_menu_decor, 1, 0, 1,
+	CFGFLAG_CLIENT | CFGFLAG_SAVE, "Garland, snow and other decorations")
 MACRO_CONFIG_INT(ClZzHideKernelNetSettings, cl_zz_hide_kernelnet_settings, 0, 0,
 	1, CFGFLAG_CLIENT | CFGFLAG_SAVE | CFGFLAG_HIDDEN,
 	"Hide the KernelNet page in the standard settings sidebar")

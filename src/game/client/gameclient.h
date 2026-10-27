@@ -100,6 +100,7 @@ class CJsonFileWriter;
 #include "components/touch_controls.h"
 #include "components/voting.h"
 #include "components/zz_clickgui.h"
+#include "components/zz_newyearmenu.h"
 #include "components/zz_hook_aimbot.h"
 #include "components/zz_visual_effects.h"
 
@@ -247,6 +248,7 @@ public:
 
 	CTooltips m_Tooltips;
 	CZZClickGui m_ZZClickGui;
+	CZZNewYearMenu m_ZZNewYearMenu;
 	CZZHookAimbot m_ZZHookAimbot;
 	CZZWorldPostProcess m_ZZWorldPostProcess;
 	CZZVisualEffects m_ZZVisualEffects;
